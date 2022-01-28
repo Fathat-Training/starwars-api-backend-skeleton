@@ -5,10 +5,8 @@
 
 ###Backend API Learning Workflow:
 
-#### Introduction:
-
 ---
-#### **Stage-1** 
+### **Stage-1** 
 
 #### Description: 
 Getting Flask running and creating our first API call, defining the required OpenApi Yaml configuration for it.
@@ -274,7 +272,7 @@ components:
 
    <br/>
    
-3. Now we understand the openapi.yaml specification for our API calls Request and Response let's add the connection (connexion) between our openapi.yaml specification and our first film endpoint.
+3. Now we understand the openapi.yaml specification for our API call's Request and Response let's add the connection (connexion) between our openapi.yaml specification and our first film endpoint.
    <br/><br/>
    Copy the following code and replace everything in main.py with this new code. 
 
@@ -353,9 +351,9 @@ components:
    ```
    
    The response is the schema FilmResponse. But how are we sending the response back from the film endpoint
-   to the client from our Film endpoint? Go check that endpoint and you will see that it has a 'pass'.
+   to the client? Checking that endpoint, you will see that it has a 'pass'.
    <br/><br/>
-   To recap a pass in python does nothing but allows the function to be semantically correct.
+   To recap a pass in python does nothing but allows the function to be semantically correct without any functional code.
    <br/><br/>
    So we have an endpoint that will receive arguments based on our OpenApi specification but 
    actually does nothing.
@@ -385,10 +383,10 @@ components:
    Take a moment to check the details of the API call
    * Check what parameters it requires for the Request, what optional parameters might be passed
    * Check the Response it requires
-   * Take a look at the schemas for the Films
+   * Take a look at the schemas for Films
    
    <br/><br/>
-   Once you are comfortable with 
+   Once you are comfortable with the openAPi specification, 
    Click on the GET film API and you will see the following:
    
    <br/><br/>
@@ -406,7 +404,7 @@ components:
    ![](.build-1_images/102b7afe.png)
    <br/><br/>
    
-   The server returned a 204 - No Content response. The call did not fail in as much as it was successful, however,
+   The server returned a 204 - No Content response. The call did not fail in as much as it was successfully routed, however,
    the endpoint returned nothing.
    <br/><br/>
    Let's fix that!
@@ -457,7 +455,7 @@ components:
   <br/><br/>
   Let's briefly discuss this function and understand what it does.
 
-  Now let's get a call to this endpoint into our Films endpoint.
+  Now let's get a call to this response function into our Films endpoint.
   <br/><br/>
 
   Go to the films endpoint file - films/v1/endpoints.py, and add the following under the section
@@ -467,7 +465,7 @@ components:
   from basehandler import api_response
   ```
   
-  This will import the function api_response from the basehandlers.py file that we added the function to earlier
+  This will import the function api_response from the basehandlers.py file that we added earlier
   
   <br/><br/>
   Now add the following to the get_film endpoint, removing 'pass' first.
@@ -476,9 +474,11 @@ components:
   return api_response()
   ```
  
-  Now let's run our application again. Yeap, that's correct we get the exact same response a 204 - No Content.
+  Run the application again.
+  <br/><br/>
+  Yeap, that's correct we get the exact same response a 204 - No Content.
 
-  ###Summary of what we have acheived so far!
+  ###Summary of what we have achieved so far!
 
   * We have got a running flask app
   * We have coded our first films endpoint.
