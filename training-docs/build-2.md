@@ -89,10 +89,10 @@ In this module we shall use two types of methods to send requests. Let's look at
    <br/><br/>
    We will use this kind of request when we require a single record from the Star Wars API.
    <br/><br/>
- 
+   
    ####A synchronous Request
     
-  ![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/syncio-requests.drawio.png)
+   ![](images/syncio-requests.drawio.png)
    
   <br/>
 
@@ -103,7 +103,7 @@ In this module we shall use two types of methods to send requests. Let's look at
       <br/><br/>
       ####An asynchronous Request
       
-      ![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/async-request.drawio.png)
+      ![](images//async-request.drawio.png)
        <br/><br/>
       As you can see from the diagram above, using an asyncio client session and aiohttp there is a connection pool that
       enables multiple requests to be sent simultaneously in any order to our Star Wars API.
