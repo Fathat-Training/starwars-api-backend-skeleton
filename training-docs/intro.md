@@ -13,7 +13,7 @@ let's take a look at the structure in more detail.
 <br/><br/>
 Below is an image of the structure:
 
-![](/Users/chezx/Desktop/Screen Shot 2022-01-27 at 13.32.13.png)
+![](images/api-structure.png)
 
 As you can see there are many folders, some of which are open and a bunch of files in the root.
 <br/><br/>
@@ -22,7 +22,7 @@ Let's quickly go over the design of the api by looking at root files and the fil
 <br/><br/>
 The root files - all of which are empty except requirements.txt and the readme.md:
 
-![](/Users/chezx/Desktop/Screen Shot 2022-01-27 at 13.36.13.png)
+![](images/root-files.png)
 
 * __init__.py - The root python initialisation file
 * basehandler.py - Will contain the main function required for any packaging of the responses to API requests back 
@@ -36,7 +36,7 @@ The root files - all of which are empty except requirements.txt and the readme.m
 <br/>
 Now let's look at the typical API structure using films.
 
-![](/Users/chezx/Desktop/Screen Shot 2022-01-27 at 13.50.37.png)
+![](images/films-structure.png)
 
 * v1 - this is used for versioning our API, v1=version1. At some point we may have a v2 foilder, which contain the same files but with different code, a newer version. We can direct API requests to different versions, for example we may have v2 for characters but not for films, so we can direct all the character api requests to v2 of the character code.
 __init__.py - the python initialisation package for this folder.
