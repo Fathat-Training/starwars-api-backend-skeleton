@@ -48,12 +48,12 @@ Note we do not touch data in the endpoints methods. Why would we do this, well i
 <br/>
 To get a feel for the flow of our API request and response check the simple data flow diagram below.
 
-![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/data-flow-1.png)
+![](images/data-flow-1.png)
 
 <br/>
 Finally let's look at the folders auth, config, database and errors.
 
-![](/Users/chezx/Desktop/Screen Shot 2022-01-27 at 14.37.09.png)
+![](images/other-structure.png)
 * auth - All of the files for authentication and security for our API are here. 
 * config - Any and all configuration such as database login details, security hashes used and anything else for configuration. This
 * database - All the database handling is done here. We use two types of database in this project, MySQL a sequel server database and Redis a no-sql database.
