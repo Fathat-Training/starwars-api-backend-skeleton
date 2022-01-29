@@ -603,6 +603,8 @@ The algorithm works as follows:
      variable filtered_dict. 
    * The new_dict variable is then updated with the contents of filtered_dict. 
 
+The filtered data returned is what is returned in the response to the client.
+<br/><br/>
 That's it for our options_filter function. Now let's take that code and add it to our utils.py file.
 </details>
 
