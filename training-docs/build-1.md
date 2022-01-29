@@ -289,7 +289,7 @@ components:
    
    
    # -------------------------------------------------
-   #  Local Imports
+   #  Module Imports
    # -------------------------------------------------
    
    
@@ -407,7 +407,7 @@ components:
    The server returned a 204 - No Content response. The call did not fail in as much as it was successfully routed, however,
    the endpoint returned nothing.
    <br/><br/>
-   Let's fix that!
+   Let's take a step further in fixing that!
    <br/><br/>
 
 4. Copy the following code into the basehandler.py
@@ -459,7 +459,7 @@ components:
   <br/><br/>
 
   Go to the films endpoint file - films/v1/endpoints.py, and add the following under the section
-  Local Imports.
+  Module Imports.
 
   ```python
   from basehandler import api_response
