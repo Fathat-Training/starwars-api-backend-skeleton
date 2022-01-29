@@ -12,7 +12,9 @@
 Getting Flask running and creating our first API call, defining the required OpenApi Yaml configuration for it.
 Connecting that to our endpoint and finally running it.
 
-1. Get flask running
+<details>
+
+<summary style="color: #4ba9cc">1. Get flask running</summary>
    <br/><br/>
    Copy the following code and place it in main.py in the root folder. 
 
@@ -62,8 +64,12 @@ Connecting that to our endpoint and finally running it.
    If you click on the http://127.0.0.1:5000/ you will go to the browser but all you'll get is a not found page.
    This is because the Flask app is simply running on a port on localhost but not pointing to anything. 
    <br/><br/>
+</details>
 
-2. Let's add our first endpoint for the API - This will be a film endpoint. 
+<details>
+<summary style="color: #4ba9cc">2. Add our first endpoint for the API</summary> 
+   <br/><br/>
+   Our first endpoint is a films endpoint
    <br/><br/>
    Navigate to the films/v1/folder and copy the following code and append it to endpoints.py
 
@@ -271,9 +277,13 @@ components:
     However, before we move on to fixing that let's take a good long look at what we've just placed in our openapi.yaml file.
 
    <br/>
-   
-3. Now we understand the openapi.yaml specification for our API call's Request and Response let's add the connection (connexion) between our openapi.yaml specification and our first film endpoint.
+
+</details>
+
+<details>
+<summary style="color: #4ba9cc">3. Add the connection between our openapi.yaml specification and our first film endpoint.</summary>
    <br/><br/>
+   Now we understand the openapi.yaml specification for our API call's Request and Response let's add the connection (connexion) between our openapi.yaml specification and our first film endpoint.
    Copy the following code and replace everything in main.py with this new code. 
 
    ```python
@@ -410,8 +420,12 @@ components:
    Let's take a step further in fixing that!
    <br/><br/>
 
-4. Copy the following code into the basehandler.py
+</details>
+
+<details>
+<summary style="color: #4ba9cc">4.Add our API Response</summary>
   <br/><br/>
+   Copy the following code into the basehandler.py
 
    ```python
       
@@ -489,3 +503,5 @@ components:
 
   But hold on a minute, all that work and we still have no data. Obviously we are missing something. Yes, you guessed it some route into the Star Wars Data.
   Which, takes us neatly into stage-2, Defining our Data Access layers and defining our interface to the Star Wars API.
+
+</details>

@@ -12,7 +12,7 @@
 Develop a module that will provide access to the Star Wars API and connect that to our Films endpoint via a data access layer and introduce our API error handling..
 <br/><br/>
 <details>
-<summary>1. Build an interface to the 'https://swapi.py4e.com/api/' api to retreive data about Star Wars.</summary>
+<summary style="color: #4ba9cc">1. Build an interface to the 'https://swapi.py4e.com/api/' api to retreive data about Star Wars.</summary>
 
    For this module we shall build a class, a star wars object that provides us access to an external source of Star Wars data.
    <br/><br/>
@@ -297,7 +297,7 @@ In this module we shall use two types of methods to send requests. Let's look at
 </details>
 
 <details>
-<summary>2. Adding access to the above code for the endpoint via a DataAccess layer.</summary>
+<summary style="color: #4ba9cc">2. Adding access to the above code for the endpoint via a DataAccess layer.</summary>
 
     We now have a gateway to the external Star Wars API data, but we need someway of connecting to that from our endpoint. This is where our data access layer comes into play.
     As mentioned in the introduction, we use a data access layer as a means to separate dealing with our data sources. This helps us maintain a robust structure and minimises maintenance, redundancy and refactoring.
@@ -511,9 +511,105 @@ Here's what's happening line by line.
 * We have modified our endpoint to interface with the data access layer
 * We have understood our 'options' object.
 
-Now we shall do the following
+</details>
 
-* Introduce our options_filter function in our utils.py file
-* Add our error handling for exceptions.
+<details>
+<summary style="color: #4ba9cc">3. Introduce our options_filter function in our utils.py file</summary>
 
+We already understand what our options_filter function has to do, now let's look at the code and see how it does it.
+
+```python
+# -*- coding: utf-8 -*-
+
+# ------------------------------------------------
+#    External imports
+# ------------------------------------------------
+
+# ------------------------------------------------
+#    Python Imports
+# ------------------------------------------------
+
+# ------------------------------------------------
+#    Module Imports
+# ------------------------------------------------
+
+from config.v1.app_config import SMTP
+import smtplib, ssl
+
+
+def options_filter(data, options):
+    """
+        Filters through a list of dictionaries or a single dictionary and removes any data from the options dict that is set to false
+
+    :param data: maybe a list of dicts or a single dict
+    :param options: The options to filter on
+    :return: Filtered data
+    """
+
+    # Define an empty list to hold all our filtered dictionaries
+    fl = []
+
+    def filter_options(data_set, options):
+        new_dict = {}
+        for k, _ in data_set.items():
+            # The following line is a dictionary comprehension. It is used to filter optional data specified in the kwargs argument.
+            # which is passed into the API by the client request as a Json dictionary of options.
+            # The way it works is to filter key-value pairs from the returned film_entity dictionary against the kwargs dictionary.
+            # Any key-value pair in the film_entity dictionary that is in the options dictionary of kwargs and set to False should be excluded from the returned data.
+            filtered_dict = {k: v for (k, v) in data_set.items() if k not in options or options[k] is True}
+            new_dict.update(filtered_dict)
+        return new_dict
+
+    if isinstance(data, list):
+
+        for item in data:
+            fd = filter_options(item, options)
+            fl.append(fd)
+    else:
+        fd = filter_options(data, options)
+        fl.append(fd)
+
+    return fl
+
+
+```
+
+The function has two parameters
+* data - a python dictionary or list of dictionaries containing the options to filter
+* options - the object that contains the key-value pair mapping of data we want to include or not.
+
+Let's go through what's happening step by step.
+
+1. We declare an empty list - fl = [] 
+2. We check if our data parameter is a list.
+   <br/><br/>
+   If it is a list we use an iteration (for loop) to take each object (item) from the data and call the function
+   filter_options with the item and the options object. We'll cover filter_options shortly. We then take the result and append it to the list we declared earlier 'fl'
+   The loop concludes when all data items have been through the function filter_options. Our resulting 'fl' list contains all the items send but with our options applied to them
+   <br/><br/>
+   If it is not a list we simply pass the data object to filter_options along with the options object and append the result to our 'fl' list, which contains a single item filtered using our options object.
+3. Return 'fl'
+
+The function filter_options has the task of iterating over the item (data_set) passed to it using the options object which is a dictionary.
+
+The algorithm works as follows:
+
+1. Declare a new empty dictionary called new_dict.
+2. Iterate over the items in the data_set and filter them via a dictionary comprehension function as follows
+   <br/><br/>
+   The dictionary comprehension does the following:
+
+   * Takes each key-value pair from the data_set and checks to see if the same key is in options and is set to True, if it is set to True or the key is not in options the key-value pair are added to the
+     variable filtered_dict. 
+   * The new_dict variable is then updated with the contents of filtered_dict. 
+
+That's it for our options_filter function. Now let's take that code and add it to our utils.py file.
+</details>
+
+<details>
+<summary style="color: #4ba9cc">4. Add our error handling for exceptions</summary>
+</details>
+
+<details>
+<summary style="color: #4ba9cc">5. Introduce our second film endpoint and associated data access method</summary>
 </details>
