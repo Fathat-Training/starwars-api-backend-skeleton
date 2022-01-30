@@ -33,7 +33,7 @@ Connecting that to our endpoint and finally running it.
    # -------------------------------------------------
    
    # -------------------------------------------------
-   #  Local Imports
+   #  Module Imports
    # -------------------------------------------------
    
    # -------------------------------------------------
@@ -80,7 +80,7 @@ Connecting that to our endpoint and finally running it.
         :param film_id: The id of the film to be retrieved
         :return: Film Entity
         :errors:
-            DataAccessError - raises an APIError
+            raises an APIError
         """
         pass
    ```

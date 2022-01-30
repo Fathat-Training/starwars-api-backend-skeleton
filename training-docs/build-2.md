@@ -18,70 +18,68 @@ Develop a module that will provide access to the Star Wars API and connect that 
    <br/><br/>
    Copy the code below into the starwars.py file.
 
-   ```python
+```python
       # -*- coding: utf-8 -*-
 
+# ------------------------------------------------
+#    External imports
+# ------------------------------------------------
 
-    # ------------------------------------------------
-    #    External imports
-    # ------------------------------------------------
-    
-    import asyncio
-    import aiohttp
-    import requests
-    
-    # ------------------------------------------------
-    #    Python Imports
-    # ------------------------------------------------
-    
-    # ------------------------------------------------
-    #     local Imports
-    # ------------------------------------------------
-    from errors.v1.handlers import DataAccessError
-    
-    # ------------------------------------------------
-    #    Script Wide Variables
-    # ------------------------------------------------
-    URL = 'https://swapi.py4e.com/api/'
-    
-    
-    # ------------------------------------------------
-    #          CLASSES START HERE
-    # ------------------------------------------------
-    
-    
-    class StarWars(object):
-        """
-            Star Wars object
-            Facilitates Async Calls to the swapi api for retrieval of star wars data.
-            All methods are static helper functions with the exception of request_data.
-            The request_data function is used to retrieve star wars data and called via api
-            StarWars class object instance.
-        """
-    
-        def __init__(self, **kwargs):
-    
-            # Variables used for each instance of the class.
-            self.swars_data = []
-   ```
+import asyncio
+import aiohttp
+import requests
+
+# ------------------------------------------------
+#    Python Imports
+# ------------------------------------------------
+
+# ------------------------------------------------
+#     Module Imports
+# ------------------------------------------------
+from errors.v1.handlers import ApiError
+
+# ------------------------------------------------
+#    Script Wide Variables
+# ------------------------------------------------
+URL = 'https://swapi.py4e.com/api/'
+
+
+# ------------------------------------------------
+#          CLASSES START HERE
+# ------------------------------------------------
+
+
+class StarWars(object):
+    """
+        Star Wars object
+        Facilitates Async Calls to the swapi api for retrieval of star wars data.
+        All methods are static helper functions with the exception of request_data.
+        The request_data function is used to retrieve star wars data and called via api
+        StarWars class object instance.
+    """
+
+    def __init__(self, **kwargs):
+
+        # Variables used for each instance of the class.
+        self.swars_data = []
+  ```
    
    Above you can see that we have a class called StarWars and an __init__ method. This method is used to 
    add any variables to all new star wars objects.
     <br/><br/>
    Here you can see that we set the object variable swars_data to an empty list. We will see how this is used later.
 
-   <br/><br/>
-   
+
    Look at the 'External Imports' near the top of the page.
 
-   ```python
-    import asyncio
-    import aiohttp
-    import requests
-   ```
+```python
+import asyncio
+import aiohttp
+import requests
+```
 
 In this module we shall use two types of methods to send requests. Let's look at them in order of least complexity.
-<br/><br/>
+<br/>
    1. A synchronous request via the third import in the list - the package requests.
    <br/><br/>
    requests is a well known python package that handles requests to any reachable service.
@@ -137,7 +135,7 @@ In this module we shall use two types of methods to send requests. Let's look at
                       self.swars_data.extend(data['results'])
                   else:
                       error = f"url {url}"
-                      raise DataAccessError(message=error, status_code=resp.status)
+                      raise ApiError(message=error, status_code=resp.status)
    
         async def api_query(self, urls, **kwargs):
                   """
@@ -207,10 +205,10 @@ In this module we shall use two types of methods to send requests. Let's look at
 
             except requests.ConnectionError as e:
                 msg = "OOPS!! Connection Error. Make sure you are connected to a live Internet connection."
-                raise DataAccessError(message=msg, status_code=status)
+                raise ApiError(message=msg, status_code=status)
             except requests.Timeout as e:
                 msg = "OOPS!! Timeout Error"
-                raise DataAccessError(message=msg, status_code=status)
+                raise ApiError(message=msg, status_code=status)
             except requests.HTTPError as e:
                 if status == 404:
                     msg = "Not Found"
@@ -220,10 +218,10 @@ In this module we shall use two types of methods to send requests. Let's look at
                     msg = "Server Error on the Star Wars Api"
                 else:
                     msg = "Opps Something went wrong!!"
-                raise DataAccessError(message=msg, status_code=status)
+                raise ApiError(message=msg, status_code=status)
             except KeyboardInterrupt:
                 msg = "Someone closed the program"
-                raise DataAccessError(message=msg, status_code=status)
+                raise ApiError(message=msg, status_code=status)
    ```
    
     <br/>
@@ -243,7 +241,7 @@ In this module we shall use two types of methods to send requests. Let's look at
       If it is a 200 (all good), we take the json response data from the response object and assign it to our swars_data variable we declared in the class __init__ method. This
       <br/><br/>
       If it is not ok we raise an exception. The exception message depends on the status. The exception being raised for all errors is the
-      a DataAccessError. We'll get to our error handling shortly. For now, it is enough to know that errors/exceptions are being 
+      an ApiError. We'll get to our error handling shortly. For now, it is enough to know that errors/exceptions are being 
       handled.
    <br/><br/>
    
@@ -289,7 +287,7 @@ In this module we shall use two types of methods to send requests. Let's look at
     
     What happens in fetch_json, simple it makes a request to the url with specified query and arguments using the client session (connection pool).
     It uses the 'await' keyword here to release the event loop to fire the next call...When the response comes, it checks the status and if all ok, 
-    adds the returned json response data to our class object swars_data variable. If there is an error then it handles it by raising a DataAccessError. We
+    adds the returned json response data to our class object swars_data variable. If there is an error then it handles it by raising an Api Error.
     <br/><br/>
 
     Hopefully you have understood what's happening now and are ready to move on, but before you do that copy the last section of code and append it to the starwars.py file.
@@ -311,18 +309,15 @@ def get_film(film_id, **kwargs):
     :param film_id: The id of the film to be retrieved
     :return: Film Entity
     :errors:
-        DataAccessError - raises an APIError
+        ApiError - raises an APIError
     """
     api_response()
 ```
     We are going to replace the line 'api_response()' with the code block below
 
 ```python
-try:
     film = FilmDacc.film(film_id, kwargs['options'])
     return api_response(film)
-except DataAccessError as e:
-    raise ApiError(e.message, e.status_code, e.payload)
 ```
 
     This is our code for accessing the films data access layer. It is wrapped in a try except block. This allows us to catch any exceptions that occur in the data access layer
@@ -360,7 +355,6 @@ Open the data_access.py file in the same folder and copy the following code into
 # ------------------------------------------------
 #     Module Imports
 # ------------------------------------------------
-from errors.v1.handlers import DataAccessError
 from starwars import StarWars
 from utils import options_filter
 
@@ -563,11 +557,17 @@ def options_filter(data, options):
     if isinstance(data, list):
 
         for item in data:
-            fd = filter_options(item, options)
-            fl.append(fd)
-    else:
+            if isinstance(item, dict):
+                fd = filter_options(item, options)
+                fl.append(fd)
+                
+    elif isinstance(data, dict):
+        
         fd = filter_options(data, options)
         fl.append(fd)
+        
+    else:
+        return data
 
     return fl
 
@@ -584,32 +584,238 @@ Let's go through what's happening step by step.
 2. We check if our data parameter is a list.
    <br/><br/>
    If it is a list we use an iteration (for loop) to take each object (item) from the data and call the function
-   filter_options with the item and the options object. We'll cover filter_options shortly. We then take the result and append it to the list we declared earlier 'fl'
-   The loop concludes when all data items have been through the function filter_options. Our resulting 'fl' list contains all the items send but with our options applied to them
+   filter_options with the item and the options object. We make sure the item is a dictionary before we pass it. If it is not, we ignore it and continue the loop.
+   We'll cover filter_options shortly. If it is a dictionary object we then take the result and append it to the list we declared earlier 'fl'
+   The loop concludes when all data items have been through the function filter_options. Our resulting 'fl' list contains all the items with our options applied to them
    <br/><br/>
-   If it is not a list we simply pass the data object to filter_options along with the options object and append the result to our 'fl' list, which contains a single item filtered using our options object.
+   If it is not a list make sure it is a dictionary object and pass the object to filter_options along with the options object and append the result to our 'fl' list, which contains a single item filtered using our options object.
+   <br/><br/>
+   If it is neither a list nor a dictionary then we ignore it and pass back the data as it came.
+   <br/><br/>
 3. Return 'fl'
-
-The function filter_options has the task of iterating over the item (data_set) passed to it using the options object which is a dictionary.
-
-The algorithm works as follows:
-
-1. Declare a new empty dictionary called new_dict.
-2. Iterate over the items in the data_set and filter them via a dictionary comprehension function as follows
    <br/><br/>
-   The dictionary comprehension does the following:
 
-   * Takes each key-value pair from the data_set and checks to see if the same key is in options and is set to True, if it is set to True or the key is not in options the key-value pair are added to the
-     variable filtered_dict. 
-   * The new_dict variable is then updated with the contents of filtered_dict. 
-
-The filtered data returned is what is returned in the response to the client.
-<br/><br/>
-That's it for our options_filter function. Now let's take that code and add it to our utils.py file.
+    The function filter_options has the task of iterating over the item (data_set) keys and comparing those against keys in the options object which is a dictionary.
+    <br/><br/>
+    The algorithm works as follows:
+    <br/><br/>
+   1. Declare a new empty dictionary called new_dict.
+   2. Iterate over the items in the data_set and filter them via a dictionary comprehension function as follows
+  <br/><br/>
+  The dictionary comprehension does the following:
+  <br/><br/>
+      * Takes each key-value pair from the data_set and checks to see if the same key is in options and is set to True, if it is set to True or the key is not in options the key-value pair are added to the
+        variable filtered_dict. 
+      * The new_dict variable is then updated with the contents of filtered_dict. 
+  <br/><br/>
+    The filtered data is returned and forwarded on in the api_response to the client.
+   <br/><br/>
+  That's it for our options_filter function. Now let's take that code and add it to our utils.py file.
 </details>
 
 <details>
 <summary style="color: #4ba9cc">4. Add our error handling for exceptions</summary>
+
+As we have seen in the various blocks of code there are numerous exception possibilities. We need to present these exceptions in
+a standard manner for both us the developers and the client. 
+<br/><br/>
+We use one exception declaration in our code:
+* ApiError
+
+Let's look at the exception handling in the 'request_data_sync'
+
+```python
+def request_data_sync(self, query):
+    """
+        Request and wait for our data to return
+        In this method we are using the requests package to make a simple synchronous API call
+        The code is blocked until the response is received.
+    :param query: Contains query parameters for the request
+    :return:
+    """
+    status = ""
+
+    try:
+        # Format the url from the main swapi url plus the query/queries
+        url = f"{URL}{query}/"
+        # make the request
+        r = requests.get(url=url)
+        # Raise the status to make sure it was successful. If it is not the below exception will occur
+        status = r.status_code
+        r.raise_for_status()
+
+        # We have success - let's return the data
+        # extracting data in json format
+        self.swars_data = r.json()
+
+    except requests.ConnectionError as e:
+        msg = "OOPS!! Connection Error. Make sure you are connected to a live Internet connection."
+        raise ApiError(message=msg, status_code=status)
+    except requests.Timeout as e:
+        msg = "OOPS!! Timeout Error"
+        raise ApiError(message=msg, status_code=status)
+    except requests.HTTPError as e:
+        if status == 404:
+            msg = "Not Found"
+        elif status == 400:
+            msg = "Bad Request"
+        elif status == 500:
+            msg = "Server Error on the Star Wars Api"
+        else:
+            msg = "Opps Something went wrong!!"
+        raise ApiError(message=msg, status_code=status)
+    except KeyboardInterrupt:
+        msg = "Someone closed the program"
+        raise ApiError(message=msg, status_code=status)
+```
+
+As can be seen from the code, the 'requests' package has numerous exceptions itself. We use these to catch the various exceptions that occur when using the 'requests' package.
+However, we then raise our own exception ApiError and assign the message and status code to it.
+
+But why have an ApiError as well as the other exceptions. Predominantly two reasons:
+ * To set an exception standard at certain points that perform certain logic, i.e. accessing data
+ * To tailor the exception message. When using various packages, you get slightly different messages for the same error.
+   By tailoring the messages to a standard we don't bombard the client with different messages for the same exception.
+ <br/><br/>
+
+When we write an API or other codebase for that matter we may decide on a number of exceptions to standardise on, this makes our life easier as a developer.
+However, we do not want to confuse the client with a number of different exceptions. Where those occur in our codebase is not really interesting to a client of the API.
+
+<br/><br/>
+
+So what we do is we define a single exception to use for communicating exceptions to the client. In our case it is our second exception,
+the ApiError.
+
+<br/><br/>
+Coding our exceptions:
+<br/><br/>
+Before we get into the actual error handling functions which will exist in 'errors/v1/handlers.py', we need to make a couple of changes to the main.py file that
+<br/><br/>
+Under 'Module Imports' in main.py place the following line of code
+
+```python
+from errors.v1 import handlers as error_handlers
+```
+
+Then add the following directly under the app.add.api function call. Placing a new line inbetween 
+
+```python
+app.app.register_blueprint(error_handlers.error_handlers)
+```
+
+What the above line does is add a Flask blueprint registration. Blueprints are typically used to modularise a Flask application. But in this instance we are using it to 
+add our error handling functions as a module. 
+<br/>
+
+There are several ways to handle exceptions in Flask, some simpler than others. The reason we are using a blueprint is so that we can
+place all our error code in another file and not in our main.py. 
+
+The following error handling code shows how this is done.
+
+```python
+# -*- coding: utf-8 -*-
+
+# ------------------------------
+#  External Imports
+# ------------------------------
+from flask import Blueprint
+from flask import jsonify
+
+# ------------------------------
+#  Python Imports
+# ------------------------------
+import logging
+
+# ------------------------------
+#  Module Imports
+# ------------------------------
+
+
+# ------------------------------
+#  Flask Blueprint Declaration
+# ------------------------------
+error_handlers = Blueprint('error_handlers', __name__)
+
+
+# ------------------------------
+#  Error Classes
+# ------------------------------
+
+class ApiError(Exception):
+    """
+        Parent Error Class - inherits default Exception
+    :param: Exception - The raised exception
+    """
+    def __init__(self, message='There was an error', status_code=500, payload=None):
+        """
+        Class
+        :param message: String
+        :param status_code: Integer
+        :param payload: Dict
+        """
+        Exception.__init__(self)
+        self.message = message
+
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+        super(ApiError, self).__init__(message, status_code, payload)
+
+    def to_dict(self):
+        """
+            Convert payload to a dictionary and add the message
+        :return:
+        """
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        rv['status'] = "error"
+        return rv
+
+
+@error_handlers.app_errorhandler(ApiError)
+def handle_api_error(error):
+    """
+        Handles and logs the ApiError
+    :param error: The actual error
+    :return: error response
+    """
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    logging.error(str(response.json['message']))
+    return response
+
+```
+As you can see we are importing our error handling blueprint that was registered in our main.py file.
+
+```python
+# ------------------------------
+#  Flask Blueprint Declaration
+# ------------------------------
+error_handlers = Blueprint('error_handlers', __name__)
+```
+Our custom exception class is then defined.
+* ApiError
+
+
+ApiError inherits from the default python exception class 'Exception'.
+
+The ApiError class takes upto three parameters, if none of these parameters are defined in the call, i.e. ApiError(), Then
+they are defined inline in the function head.
+
+<br/>
+The last function in the code above called handle_api_error is decorated with our registered blueprint error_handler which calls the function
+app_errorhandler with the parameter of our class error, in this case APiError.
+<br/><br/>
+What this does is:
+<br/>
+
+* Take an instance of a raised ApiError (class object) and passes it to the function as the parameter 'error'.
+* Assigns a jsonified version of the arguments of the error via the class method 'to_dict', in this case message, status and payload if it exists, to the variable 'response'
+* Adds the status to the response - so the client can retrieve it separately, but this is not strictly necessary as a call to the api that results in an error will
+  receive the status code back from whatever method they are using to access the api.
+* logs the error message (converting it to a string)
+* Returns the response
+
 </details>
 
 <details>
