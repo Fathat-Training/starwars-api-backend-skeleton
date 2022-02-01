@@ -40,6 +40,6 @@ Tip: The above two parameters are already handled in the Star Wars API code - ch
 
 You have two days to figure this out - so let's get cracking.
 
-##Good Luck and my the force be with you!
+## Good Luck and my the force be with you!
 
 ![](images/iu-28.jpg)
