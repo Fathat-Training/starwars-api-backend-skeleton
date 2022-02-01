@@ -42,4 +42,4 @@ You have two days to figure this out - so let's get cracking.
 
 ##Good Luck and my the force be with you!
 
-![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/iu-28.jpg)
+![](images/iu-28.jpg)
