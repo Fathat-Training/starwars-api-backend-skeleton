@@ -3,10 +3,10 @@
 
 ---
 
-###**Backend API Learning Workflow:**
+### Backend API Learning Workflow:
 
 ---
-###**Stage 3:**
+### Stage 3:
 <span style="color: #FF1B55FF">Go it alone - Exercise</span>
 
 
