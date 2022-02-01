@@ -6,7 +6,8 @@
 ###Backend API Learning Workflow:
 
 ---
-### **Stage-2** 
+###Stage-2:
+<span style="color: #FF1B55FF">Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>
 
 #### Description: 
 Develop a module that will provide access to the Star Wars API and connect that to our Films endpoint via a data access layer and introduce our API error handling..

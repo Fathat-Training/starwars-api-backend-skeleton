@@ -5,7 +5,8 @@
 
 ###Backend API Learning Workflow:
 
-### Introduction:
+<details>
+<summary style="color:#4ba9cc">Introduction:</summary>
 
 Welcome to the Star Wars backend api learning project. The project has a complete structure
 ready for you to start learning the process of buidling this backend. Before we begin building the backend, 
@@ -63,3 +64,17 @@ That's it, so let's proceed to our build-1.md file under training-docs and get s
 <br/><br/>
 
 Have Fun! :)
+
+</details>
+
+Building Our API
+
+[<span style="color:#4ba9cc">Stage 1 - API Foundation - app, endpoint - Api specification</span>](build-1.md)
+<br/>
+[<span style="color:#4ba9cc">Stage 2 - Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>](build-2.md)
+<br/>
+[<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](characters.md)
+<br/>
+[<span style="color:#4ba9cc">Stage 4 - Adding Authorisation</span>](auth.md)
+<br/>
+[<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](users.md)

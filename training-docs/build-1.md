@@ -6,7 +6,8 @@
 ###Backend API Learning Workflow:
 
 ---
-### **Stage-1** 
+###Stage 1: 
+<span style="color: #FF1B55FF">API Foundation - app, endpoint - Api specification</span>
 
 #### Description: 
 Getting Flask running and creating our first API call, defining the required OpenApi Yaml configuration for it.
