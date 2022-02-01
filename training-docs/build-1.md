@@ -68,7 +68,7 @@ Connecting that to our endpoint and finally running it.
 
 <details>
 <summary style="color: #4ba9cc">2. Add our first endpoint for the API</summary> 
-   <br/><br/>
+
    Our first endpoint is a films endpoint
    <br/><br/>
    Navigate to the films/v1/folder and copy the following code and append it to endpoints.py
@@ -86,7 +86,6 @@ Connecting that to our endpoint and finally running it.
    ```
    
    This is the basic python function for our first films endpoint.
-   <br/><br/>
 
    Now copy the following openAPi yaml markup to the openapi.yaml file in the root folder.
 
@@ -272,17 +271,15 @@ components:
         - $ref: '#/components/schemas/FilmVehicles'
 
 ```
-   
     Now we have our first Request, Response and Schema definitions for our first API call to get a films data via the films endpoint, but no way of connecting the two together. 
     However, before we move on to fixing that let's take a good long look at what we've just placed in our openapi.yaml file.
 
-   <br/>
 
 </details>
 
 <details>
 <summary style="color: #4ba9cc">3. Add the connection between our openapi.yaml specification and our first film endpoint.</summary>
-   <br/><br/>
+   
    Now we understand the openapi.yaml specification for our API call's Request and Response let's add the connection (connexion) between our openapi.yaml specification and our first film endpoint.
    Copy the following code and replace everything in main.py with this new code. 
 
@@ -330,18 +327,15 @@ components:
 
    ```
    
-   <br/>
-   
+
    Checkout what we have added in this latest main.py code.
-   <br/><br/>
+
    * We have imported a python package called connexion
    * We have connected the connexion package to flask app - with strict validation and a title 
    * We have added a startup function to the app in case we want to run any code prior to running the app. Perhaps some config loading?
   
    * We have added a host and a port to the app.run function. This tells the app to run on 
      this out localhost at port 5003.
-   
-   <br/><br/>
 
    So, to recap:
    <br/><br/>
@@ -362,13 +356,12 @@ components:
    
    The response is the schema FilmResponse. But how are we sending the response back from the film endpoint
    to the client? Checking that endpoint, you will see that it has a 'pass'.
-   <br/><br/>
+   
    To recap a pass in python does nothing but allows the function to be semantically correct without any functional code.
    <br/><br/>
    So we have an endpoint that will receive arguments based on our OpenApi specification but 
    actually does nothing.
-   <br/><br/>
-
+   
    Let's run pour API application from main.py.
 
    ```python
@@ -389,21 +382,16 @@ components:
    
    ![](.build-1_images/92dc16da.png)
 
-   <br/><br/>
    Take a moment to check the details of the API call
    * Check what parameters it requires for the Request, what optional parameters might be passed
    * Check the Response it requires
    * Take a look at the schemas for Films
    
-   <br/><br/>
+
    Once you are comfortable with the openAPi specification, 
    Click on the GET film API and you will see the following:
-   
-   <br/><br/>
 
    ![](.build-1_images/873778c7.png)
-
-   <br/><br/>
 
    * Click on Try it out
    * Enter a 1 into the field where it says 'film_id'
@@ -424,7 +412,7 @@ components:
 
 <details>
 <summary style="color: #4ba9cc">4.Add our API Response</summary>
-  <br/><br/>
+  
    Copy the following code into the basehandler.py
 
    ```python
@@ -470,8 +458,7 @@ components:
   Let's briefly discuss this function and understand what it does.
 
   Now let's get a call to this response function into our Films endpoint.
-  <br/><br/>
-
+  
   Go to the films endpoint file - films/v1/endpoints.py, and add the following under the section
   Module Imports.
 
@@ -481,8 +468,7 @@ components:
   
   This will import the function api_response from the basehandlers.py file that we added earlier
   
-  <br/><br/>
-  Now add the following to the get_film endpoint, removing 'pass' first.
+  Add the following to the get_film endpoint, removing 'pass' first.
    
   ```python
   return api_response()
@@ -490,7 +476,7 @@ components:
  
   Run the application again.
   <br/><br/>
-  Yeap, that's correct we get the exact same response a 204 - No Content.
+ This time we get a 200 response and two curly braces signifying an empty object. 
 
   ###Summary of what we have achieved so far!
 

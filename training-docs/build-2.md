@@ -120,109 +120,109 @@ In this module we shall use two types of methods to send requests. Let's look at
       Now let's look at the code for both the synchronous and asynchronous calls made above.
       <br/><br/>
    
-    ```python
-        async def fetch_json(self, session: aiohttp.ClientSession(), url: str, **kwargs):
-                  """
-                     Async function to make multiple api calls and fetch json data for each call
-                     Adding the data when received to the self.swars_data list
-                  """
-                  print(f"Requesting {url}")
-                  resp = await session.request('GET', url=url, **kwargs)
-                  if resp.status == 200:
-                      data = await resp.json(content_type=None)
-                      print(f"Received data for {url}")
-                      # Put the results data on the end of the list
-                      self.swars_data.extend(data['results'])
-                  else:
-                      error = f"url {url}"
-                      raise ApiError(message=error, status_code=resp.status)
-   
-        async def api_query(self, urls, **kwargs):
-                  """
-                     Set up an async task for each url in urls and call the urls asynchronously.
-                     Asyncio sets up a client connection to handle all the calls to the swapi api.
-                     Calls fetch_json after each task/url call gets a response
-                  """
-                  # Single client session for all the api calls. We use an open HTTP connection for simplicity here. The
-                  # data is open source...
-                  client = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False))
+```python
+async def fetch_json(self, session: aiohttp.ClientSession(), url: str, **kwargs):
+      """
+         Async function to make multiple api calls and fetch json data for each call
+         Adding the data when received to the self.swars_data list
+      """
+      print(f"Requesting {url}")
+      resp = await session.request('GET', url=url, **kwargs)
+      if resp.status == 200:
+          data = await resp.json(content_type=None)
+          print(f"Received data for {url}")
+          # Put the results data on the end of the list
+          self.swars_data.extend(data['results'])
+      else:
+          error = f"url {url}"
+          raise ApiError(message=error, status_code=resp.status)
 
-                  async with client as session:
-                      # Create fetch tasks from the urls
-                      tasks = []
+async def api_query(self, urls, **kwargs):
+      """
+         Set up an async task for each url in urls and call the urls asynchronously.
+         Asyncio sets up a client connection to handle all the calls to the swapi api.
+         Calls fetch_json after each task/url call gets a response
+      """
+      # Single client session for all the api calls. We use an open HTTP connection for simplicity here. The
+      # data is open source...
+      client = aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False))
 
-                      for url in urls:
-                          tasks.append(self.fetch_json(session=session, url=url, **kwargs))
+      async with client as session:
+          # Create fetch tasks from the urls
+          tasks = []
 
-                      # waits for asyncio.gather() to be completed, required because we want to sort when all data has arrived
-                      await asyncio.gather(*tasks, return_exceptions=True)
-                      # This has no effect - because we are using a with statement that will automatically close the session
-                      # await session.close() 
+          for url in urls:
+              tasks.append(self.fetch_json(session=session, url=url, **kwargs))
 
-        def request_data_async(self, query, batch_size=None, max_items=None):
-            """
-                This method formats n number of urls with the parameter 'query'
+          # waits for asyncio.gather() to be completed, required because we want to sort when all data has arrived
+          await asyncio.gather(*tasks, return_exceptions=True)
+          # This has no effect - because we are using a with statement that will automatically close the session
+          # await session.close() 
 
-            param: query - the api query parameter i.e. films or people
-            param: max_items: The maximum number of items to fetch
-            params: batch_size: The maximum items returned across all batches/api calls
-            """
-            # Create the initial url
-            urls = []
-            urls_append = urls.append
+def request_data_async(self, query, batch_size=None, max_items=None):
+    """
+        This method formats n number of urls with the parameter 'query'
+    
+    param: query - the api query parameter i.e. films or people
+    param: max_items: The maximum number of items to fetch
+    params: batch_size: The maximum items returned across all batches/api calls
+    """
+    # Create the initial url
+    urls = []
+    urls_append = urls.append
+    
+    if max_items and batch_size and max_items > batch_size:
+        for i in range(1, round(max_items / batch_size) + 1):
+            urls_append(f"{URL}{query}/?page={i}")
+    else:
+        urls.append(f"{URL}{query}/")
+    
+    # Call the api query function
+    asyncio.run(self.api_query(urls)) 
 
-            if max_items and batch_size and max_items > batch_size:
-                for i in range(1, round(max_items / batch_size) + 1):
-                    urls_append(f"{URL}{query}/?page={i}")
-            else:
-                urls.append(f"{URL}{query}/")
-
-            # Call the api query function
-            asyncio.run(self.api_query(urls)) 
-
-        def request_data_sync(self, query):
-            """
-                Request and wait for our data to return
-                In this method we are using the requests package to make a simple synchronous API call
-                The code is blocked until the response is received.
-            :param query: Contains query parameters for the request
-            :return:
-            """
-            status = ""
-
-            try:
-                # Format the url from the main swapi url plus the query/queries
-                url = f"{URL}{query}/"
-                # make the request
-                r = requests.get(url=url)
-                # Raise the status to make sure it was successful. If it is not the below exception will occur
-                status = r.status_code
-                r.raise_for_status()
-
-                # We have success - let's return the data
-                # extracting data in json format
-                self.swars_data = r.json()
-
-            except requests.ConnectionError as e:
-                msg = "OOPS!! Connection Error. Make sure you are connected to a live Internet connection."
-                raise ApiError(message=msg, status_code=status)
-            except requests.Timeout as e:
-                msg = "OOPS!! Timeout Error"
-                raise ApiError(message=msg, status_code=status)
-            except requests.HTTPError as e:
-                if status == 404:
-                    msg = "Not Found"
-                elif status == 400:
-                    msg = "Bad Request"
-                elif status == 500:
-                    msg = "Server Error on the Star Wars Api"
-                else:
-                    msg = "Opps Something went wrong!!"
-                raise ApiError(message=msg, status_code=status)
-            except KeyboardInterrupt:
-                msg = "Someone closed the program"
-                raise ApiError(message=msg, status_code=status)
-   ```
+def request_data_sync(self, query):
+    """
+        Request and wait for our data to return
+        In this method we are using the requests package to make a simple synchronous API call
+        The code is blocked until the response is received.
+    :param query: Contains query parameters for the request
+    :return:
+    """
+    status = ""
+    
+    try:
+        # Format the url from the main swapi url plus the query/queries
+        url = f"{URL}{query}/"
+        # make the request
+        r = requests.get(url=url)
+        # Raise the status to make sure it was successful. If it is not the below exception will occur
+        status = r.status_code
+        r.raise_for_status()
+    
+        # We have success - let's return the data
+        # extracting data in json format
+        self.swars_data = r.json()
+    
+    except requests.ConnectionError as e:
+        msg = "OOPS!! Connection Error. Make sure you are connected to a live Internet connection."
+        raise ApiError(message=msg, status_code=status)
+    except requests.Timeout as e:
+        msg = "OOPS!! Timeout Error"
+        raise ApiError(message=msg, status_code=status)
+    except requests.HTTPError as e:
+        if status == 404:
+            msg = "Not Found"
+        elif status == 400:
+            msg = "Bad Request"
+        elif status == 500:
+            msg = "Server Error on the Star Wars Api"
+        else:
+            msg = "Opps Something went wrong!!"
+        raise ApiError(message=msg, status_code=status)
+    except KeyboardInterrupt:
+        msg = "Someone closed the program"
+        raise ApiError(message=msg, status_code=status)        
+```
    
     <br/>
    Let's walk through the code and map it to the images above.
@@ -247,60 +247,59 @@ In this module we shall use two types of methods to send requests. Let's look at
    
    2. Let's now explore the more complex asynchronous method.
       
-    ```python
-    def request_data_async(self, query, batch_size=None, max_items=None):
-    ```
-    As you can see we pass in three parameters.
-    <br/><br/>
-    * The query parameter
-    * A batch_size parameter - this tells us how many items we would like the Star Wars API to return in a single call.
-    * A max_items parameter - this tells us how many items in total across all calls we wish to retrieve.
-   
-    <br/><br/>
+```python
+def request_data_async(self, query, batch_size=None, max_items=None):
+```
+As you can see we pass in three parameters.
+<br/><br/>
+* The query parameter
+* A batch_size parameter - this tells us how many items we would like the Star Wars API to return in a single call.
+* A max_items parameter - this tells us how many items in total across all calls we wish to retrieve.
 
-    This method builds n urls. Both batch_size and max_items are optional. If they have no value a single url is created by appending the Star Wars url with the query.
-    Otherewise, a series of urls is created, according to the max_items being divided by the batch_size parameter. For each of these urls we not only append the query but also an extra
-    query parameter called page, which equates to a number starting at 1 and ending in n+1. 
 
-    <br/><br/>
-    Once our urls have been created we run the asyncio via asyncio.run, passing it a call to our query function which has the urls and any other arguments as parameters.
-    This function then gets called within the asyncio process.
+This method builds n urls. Both batch_size and max_items are optional. If they have no value a single url is created by appending the Star Wars url with the query.
+Otherewise, a series of urls is created, according to the max_items being divided by the batch_size parameter. For each of these urls we not only append the query but also an extra
+query parameter called page, which equates to a number starting at 1 and ending in n+1. 
 
-    ```python
-    async def api_query(self, urls, **kwargs):
-    ```
-   
-    The first thing to notice about our api_query function is that the definition 'def' is preceded by 'async'.
-    <br/><br/>
-    When a function is preceded by the keyword 'async' we know that this function is an asynchronous coroutine and will call some process using the 'await' keyword.
-    The 'await' keyword tells the code to pass back control to the event loop. Therefore, the method api_query is a coroutine that performs a bunch of asynchronous calls.
-    <br/><br/>
-    As you can see from the code we assign a bunch of tasks/request calls to a task list using the urls passed in. Each task is assignedd a method that it will call, 
-    in this case
+<br/><br/>
+Once our urls have been created we run the asyncio via asyncio.run, passing it a call to our query function which has the urls and any other arguments as parameters.
+This function then gets called within the asyncio process.
+
+```python
+async def api_query(self, urls, **kwargs):
+```
+
+The first thing to notice about our api_query function is that the definition 'def' is preceded by 'async'.
+<br/><br/>
+When a function is preceded by the keyword 'async' we know that this function is an asynchronous coroutine and will call some process using the 'await' keyword.
+The 'await' keyword tells the code to pass back control to the event loop. Therefore, the method api_query is a coroutine that performs a bunch of asynchronous calls.
+<br/><br/>
+As you can see from the code we assign a bunch of tasks/request calls to a task list using the urls passed in. Each task is assignedd a method that it will call, 
+in this case
  
-    ```python
-    def fetch_json(self, session: aiohttp.ClientSession(), url: str, **kwargs):
-    ```
-   
-    This method has session, a relevant url and any extra arguments as parameters. Once we call asyncio.gather in our api_query method, passing our task list as a parmeter, 
-    the 'fetch_json' function will be executed asynchronously until all tasks have been called. So if we have 10 urls to call 'fetch_json' gets called 10 times. So
-    
-    What happens in fetch_json, simple it makes a request to the url with specified query and arguments using the client session (connection pool).
-    It uses the 'await' keyword here to release the event loop to fire the next call...When the response comes, it checks the status and if all ok, 
-    adds the returned json response data to our class object swars_data variable. If there is an error then it handles it by raising an Api Error.
-    <br/><br/>
+```python
+def fetch_json(self, session: aiohttp.ClientSession(), url: str, **kwargs):
+```
 
-    Hopefully you have understood what's happening now and are ready to move on, but before you do that copy the last section of code and append it to the starwars.py file.
-    
+This method has session, a relevant url and any extra arguments as parameters. Once we call asyncio.gather in our api_query method, passing our task list as a parmeter, 
+the 'fetch_json' function will be executed asynchronously until all tasks have been called. So if we have 10 urls to call 'fetch_json' gets called 10 times. So
+
+What happens in fetch_json, simple it makes a request to the url with specified query and arguments using the client session (connection pool).
+It uses the 'await' keyword here to release the event loop to fire the next call...When the response comes, it checks the status and if all ok, 
+adds the returned json response data to our class object swars_data variable. If there is an error then it handles it by raising an Api Error.
+<br/><br/>
+
+Hopefully you have understood what's happening now and are ready to move on, but before you do that copy the last section of code and append it to the starwars.py file.
+
 </details>
 
 <details>
 <summary style="color: #4ba9cc">2. Adding access to the above code for the endpoint via a DataAccess layer.</summary>
 
-    We now have a gateway to the external Star Wars API data, but we need someway of connecting to that from our endpoint. This is where our data access layer comes into play.
-    As mentioned in the introduction, we use a data access layer as a means to separate dealing with our data sources. This helps us maintain a robust structure and minimises maintenance, redundancy and refactoring.
-    
-    Let's look at the film endpoint again. Go to films/v1/endpoints.py and open it, you should see the following code for the endpoint get_film...
+We now have a gateway to the external Star Wars API data, but we need someway of connecting to that from our endpoint. This is where our data access layer comes into play.
+As mentioned in the introduction, we use a data access layer as a means to separate dealing with our data sources. This helps us maintain a robust structure and minimises maintenance, redundancy and refactoring.
+
+Let's look at the film endpoint again. Go to films/v1/endpoints.py and open it, you should see the following code for the endpoint get_film...
 
 ```python
 def get_film(film_id, **kwargs):
@@ -316,8 +315,8 @@ def get_film(film_id, **kwargs):
     We are going to replace the line 'api_response()' with the code block below
 
 ```python
-    film = FilmDacc.film(film_id, kwargs['options'])
-    return api_response(film)
+film = FilmDacc.film(film_id, kwargs['options'])
+return api_response(film)
 ```
 
     This is our code for accessing the films data access layer. It is wrapped in a try except block. This allows us to catch any exceptions that occur in the data access layer
@@ -329,9 +328,9 @@ def get_film(film_id, **kwargs):
 ```python
 film = FilmDacc.film(film_id, kwargs['options'])
 ```
-    This method, if successful, will return all of the film data for the requested film ID. Before we take a look at the class in our data films access layer we first need to import the FilmDacc object
+This method, if successful, will return all of the film data for the requested film ID. Before we take a look at the class in our data films access layer we first need to import the FilmDacc object
 
-    Under Films Data Access layer introduce the import thus:
+Under Films Data Access layer introduce the import thus:
 
 ```python
 from films.v1.data_access import *
@@ -527,8 +526,6 @@ We already understand what our options_filter function has to do, now let's look
 #    Module Imports
 # ------------------------------------------------
 
-from config.v1.app_config import SMTP
-import smtplib, ssl
 
 
 def options_filter(data, options):
@@ -677,13 +674,10 @@ But why have an ApiError as well as the other exceptions. Predominantly two reas
  * To tailor the exception message. When using various packages, you get slightly different messages for the same error.
    By tailoring the messages to a standard we don't bombard the client with different messages for the same exception.
  <br/><br/>
-
 When we write an API or other codebase for that matter we may decide on a number of exceptions to standardise on, this makes our life easier as a developer.
 However, we do not want to confuse the client with a number of different exceptions. Where those occur in our codebase is not really interesting to a client of the API.
-
 <br/><br/>
-
-So what we do is we define a single exception to use for communicating exceptions to the client. In our case it is our second exception,
+So what we do is we define a single exception to use for communicating exceptions to the client. In our case it's our ApiError exception handler,
 the ApiError.
 
 <br/><br/>
@@ -708,7 +702,7 @@ add our error handling functions as a module.
 <br/>
 
 There are several ways to handle exceptions in Flask, some simpler than others. The reason we are using a blueprint is so that we can
-place all our error code in another file and not in our main.py. 
+place all of our error code in a separate file and not in our main.py. Again, this provides clarity to our code structure, we know where things are.
 
 The following error handling code shows how this is done.
 
@@ -796,13 +790,12 @@ error_handlers = Blueprint('error_handlers', __name__)
 Our custom exception class is then defined.
 * ApiError
 
-
 ApiError inherits from the default python exception class 'Exception'.
 
 The ApiError class takes upto three parameters, if none of these parameters are defined in the call, i.e. ApiError(), Then
 they are defined inline in the function head.
 
-<br/>
+
 The last function in the code above called handle_api_error is decorated with our registered blueprint error_handler which calls the function
 app_errorhandler with the parameter of our class error, in this case APiError.
 <br/><br/>
@@ -810,14 +803,192 @@ What this does is:
 <br/>
 
 * Take an instance of a raised ApiError (class object) and passes it to the function as the parameter 'error'.
-* Assigns a jsonified version of the arguments of the error via the class method 'to_dict', in this case message, status and payload if it exists, to the variable 'response'
+* Assigns a jsonified version of the arguments of the error via the class method 'to_dict', in this case, message, status and payload if it exists, to the variable 'response'
 * Adds the status to the response - so the client can retrieve it separately, but this is not strictly necessary as a call to the api that results in an error will
   receive the status code back from whatever method they are using to access the api.
-* logs the error message (converting it to a string)
+* Logs the error message (converting it to a string) - helps us developers out.
 * Returns the response
+
+Copy the above code to the error handler at errors/v1/handlers.py
+
+That's it our error handling is now in place. 
 
 </details>
 
 <details>
-<summary style="color: #4ba9cc">5. Introduce our second film endpoint and associated data access method</summary>
+<summary style="color: #ffc300">Testing Endpoint 1</summary>
+
+Let's test our code now. Run the main.py app again
+
+* Copy 'http://127.0.0.1:5003/ui' into the browser
+* Click on the Film endpoint
+* Click on 'Try it out'
+* Stick a 1 into the filed that says 'Film_id'
+* Click the blue execute bar 
+
+Hey Presto you should see the following responses:
+
+![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/film-endpoint-one-success.png)
+
+Great stuff! We have our first API endpoint running successfully. We have retrieved the complete data set of the Star Wars Movie 'A New Hope' from an external data source.
+
+###Exercise
+
+Try setting some of the options to false and get different films up, by changing the id. Hint there are 7 films.
+
+</details>
+
+<details>
+
+<summary style="color: #4ba9cc">5. Introduce our second film endpoint, the associated data access method and the openAPi spec for this endpoint</summary>
+
+Whoa! We are nearly there, but not quite.
+
+Let's top it all off by adding a second films endpoint.
+
+Our second films endpoint will retrieve all the films from the Star Wars series. 1 through 7.
+
+Check out he code:
+
+```python
+def get_films(**kwargs):
+    """
+        Fetch all the films via pagination. If there is a cursor then fetch the next batch of films
+
+    :param kwargs: dictionary object containing keyword arguments
+    :return: List of Film Entities and total film count
+    :errors:
+    """
+
+    films, count = FilmDacc.films(kwargs['options'])
+
+    if films:
+        return api_response({
+            'results': films,
+            'count': count
+        })
+    else:
+        raise ApiError('films-not-found', status_code=404)
+```
+
+'get_films' is exactly what is says on the label. The differences between this and the 'get_film' endpoint are:
+* It calls the FilmData access method 'films' instead of 'film'
+* it returns a list of film objects
+* it returns a count representing the number of films retrieved.
+
+Copy and append the code above to the films/v1/endpoints.py 
+
+The data access method 'films' is up next, let's take a look...
+
+```python
+@staticmethod
+def films(options):
+    """
+         Retrieve StarWars Films
+
+    :param options:The options for filtering what gets returned - See API Specification
+    :return: The filtered films data
+    """
+    starwars = StarWars()
+    starwars.request_data_async('films')
+    films = options_filter(starwars.swars_data, options)
+    return films, len(films)
+
+```
+
+* instantiate the starwars object
+* call the starwars object method request_data_async, passing in the query 'films'
+* filter the result with our options and return
+* return the list of film objects and the length of the list, which represents the number of films, i.e. the count.
+
+copy and append this code to the films/v1/data_access.py file
+
+Finally, let's grab our openAPI specification for this endpoint.
+
+```yaml
+/films/v1/:
+
+    get:
+      summary: Retrieve a list of star wars films - Requires login.
+      tags:
+        - Films
+      description: >
+
+        Required Headers:
+
+            Authorization request header
+
+              Bearer Valid Admin Access Token
+
+        Errors:
+
+            token-invalid, 401
+            authorisation-required, 401
+            not-found, 404
+
+      operationId: films.v1.endpoints.get_films
+      parameters:
+        - name: "options"
+          in: query
+          description: Optional Film Data
+          required: false
+          style: deepObject
+          schema:
+            $ref: '#/components/schemas/FilmExtras'
+
+      responses:
+        '200':
+          description: Returns a data object containing a list of Film entities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilmListResponse'
+```
+Copy and place the above specification and append it directly below the first endpoint specification iin your openapi.yaml file.
+
+next is the openapi schema for returning more than one film. It's called FilmListResponse
+
+```yaml
+FilmListResponse:
+  properties:
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/FilmResponse'
+    count:
+      description: total number of films returned
+      type: object
+```
+
+This takes an array/list of file objects as per the schema 'FilmResponse'
+
+Copy this schema and place it in the openapi.yaml file directly after 'FilmResponse'
+
+Great we are all set, but before we test this second endpoint take a while to study the three components we have just added. 
+Make sure you understand what is happening, and be sure to refresh yourself with the 'request_data_async' method in the starwars class.
+
+Once you are confident you understand, move on to the next 'Testing' the second endpoint below
+
+</details>
+
+<details>
+<summary style="color: #ffc300">Testing Endpoint 2</summary>
+
+* Run the main app again
+* Copy the url remembering to add the '/ui' to it.
+* Go to the second films endpoint,  just below the first one, and click 'Try it out'
+* Click the blue execute button and wait for the results.
+
+You should see the following:
+
+![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/film-endpoint-two-success.png)
+
+We have an http 200 response with data containing 7 films in total.
+
+Great Stuff! 
+
+###**Now take a while to look at all the files you have added code to and make sure you understand what's happening.** 
+
+###**It's important for the next part of the training where you will be expected to go it alone**.
+
 </details>
