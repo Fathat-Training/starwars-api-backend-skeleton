@@ -828,7 +828,7 @@ Let's test our code now. Run the main.py app again
 
 Hey Presto you should see the following responses:
 
-![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/film-endpoint-one-success.png)
+![](images/film-endpoint-one-success.png)
 
 Great stuff! We have our first API endpoint running successfully. We have retrieved the complete data set of the Star Wars Movie 'A New Hope' from an external data source.
 
@@ -981,7 +981,7 @@ Once you are confident you understand, move on to the next 'Testing' the second 
 
 You should see the following:
 
-![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/film-endpoint-two-success.png)
+![](images/film-endpoint-two-success.png)
 
 We have an http 200 response with data containing 7 films in total.
 
