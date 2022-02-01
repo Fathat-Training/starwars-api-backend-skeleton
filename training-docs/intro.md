@@ -73,7 +73,7 @@ Building Our API
 <br/>
 [<span style="color:#4ba9cc">Stage 2 - Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>](build-2.md)
 <br/>
-[<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](characters.md)
+[<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](exercise.md)
 <br/>
 [<span style="color:#4ba9cc">Stage 4 - Adding Authorisation</span>](auth.md)
 <br/>
