@@ -3,10 +3,10 @@
 
 ---
 
-###Backend API Learning Workflow:
+### Backend API Learning Workflow:
 
 ---
-###Stage 1: 
+### Stage 1: 
 <span style="color: #FF1B55FF">API Foundation - app, endpoint - Api specification</span>
 
 #### Description: 
@@ -479,7 +479,7 @@ components:
   <br/><br/>
  This time we get a 200 response and two curly braces signifying an empty object. 
 
-  ###Summary of what we have achieved so far!
+  ### Summary of what we have achieved so far!
 
   * We have got a running flask app
   * We have coded our first films endpoint.

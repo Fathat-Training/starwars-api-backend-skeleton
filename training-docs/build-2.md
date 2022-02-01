@@ -3,10 +3,10 @@
 
 ---
 
-###Backend API Learning Workflow:
+### Backend API Learning Workflow:
 
 ---
-###Stage-2:
+### Stage-2:
 <span style="color: #FF1B55FF">Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>
 
 #### Description: 
@@ -89,7 +89,7 @@ In this module we shall use two types of methods to send requests. Let's look at
    We will use this kind of request when we require a single record from the Star Wars API.
    <br/><br/>
    
-   ####A synchronous Request
+   #### A synchronous Request
     
    ![](images/syncio-requests.drawio.png)
    
@@ -100,7 +100,7 @@ In this module we shall use two types of methods to send requests. Let's look at
       We use asyncio along with aiohttp to create a set of input output tasks, i.e. in this case calls to the Star Wars APi and handle the responses via a function assigned to each call. 
       This is not the same as a promise in Javascript. We'll get to the details of how this works when we include the code shortly. In the meantime have a look at the following diagram to get a feel for we're going to do.
       <br/><br/>
-      ####An asynchronous Request
+      #### An asynchronous Request
       
       ![](images//async-request.drawio.png)
        <br/><br/>
@@ -484,13 +484,13 @@ return options_filter(starwars.swars_data, options)[0]
 
 Here's what's happening line by line.
 
-* ####starwars = StarWars()
+* #### starwars = StarWars()
   We are assigning a new instance of the class StarWars as an object an assigning it to our variable starwars.
   <br/><br/>
-* ####starwars.request_data_sync('films/'+film_id)
+* #### starwars.request_data_sync('films/'+film_id)
   We call the object method request_dat_sync with a parameter that encompasses the path for films and an extra path variable which is the film ID.
   <br/><br/>
-* ####return options_filter(starwars.swars_data, options)[0]
+* #### return options_filter(starwars.swars_data, options)[0]
   This line returns the results of the options_filter function in the utils.py file. It does this by passing in the starwars object variable swars_data.
   We also pass in the options object, so the options filter can test for the options against the data in the response. Notice that at the end of the line and after the function call is closed we have [0].
   This is stating that in the list returned we only require the first item of the list and not the whole list. Why? Well because this is an endpoint that returns a single data item and it seems pointless to send this back as a list.
