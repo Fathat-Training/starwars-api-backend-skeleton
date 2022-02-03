@@ -7,7 +7,7 @@
 
 ---
 ### Stage-4:
-<span style="color: #FF1B55FF">Adding Authentication</span>
+<span style="color:#FF1B55FF">Adding Authentication</span>
 
 #### Introduction: 
 
@@ -28,7 +28,7 @@ Summary of objectives:
   * Add authentication to some of our endpoints.
 
 <details>
-<summary style="color: #4ba9cc">Understanding JWT</summary>
+<summary style="color:#4ba9cc">Understanding JWT</summary>
 
  For a full introduction to JWT see:
 
@@ -133,7 +133,7 @@ Summary of objectives:
 </details>
 
 <details>
-<summary style="color: #4ba9cc">Understanding the Authentication Flow</summary>
+<summary style="color:#4ba9cc">Understanding the Authentication Flow</summary>
 
     An authentication flow in an API relates to the access of data or actions on that data that is allowed by any one endpoint. 
     For example, some endpoints that can 'Delete' or perform other adminsitrative actions on data will require a different/higher 
@@ -191,7 +191,7 @@ Look at the following login flow that we shall develop for our API.
 </details>
 
 <details>
-<summary style="color: #4ba9cc">Our API Authentication Levels</summary>
+<summary style="color:#4ba9cc">Our API Authentication Levels</summary>
 
 There is one type of access role for our API
 
@@ -244,7 +244,7 @@ There is one type of access role for our API
 </details>
 
 <details>
-<summary style="color: #4ba9cc">Adding our configuration details</summary>
+<summary style="color:#4ba9cc">Adding our configuration details</summary>
 
 Now that we understand a little more about JWT and the way our authentication is going to work let's get some configuration 
 in place. We'll do this by placing some basic configuration data in a file at config/v1/app_config.py. This file will hold all
@@ -344,7 +344,7 @@ JWT_EMAIL_HOURS = 1
 </details>
 
 <details>
-<summary style="color: #4ba9cc">Coding our authentication</summary>
+<summary style="color:#4ba9cc">Coding our authentication</summary>
 
 Before we start coding a quick summary of how this works again including the role of the Python/Flask package 'connexion'
 that we have already imported into our project in 'main.py'
@@ -907,10 +907,10 @@ section.
 </details>
 
 <details>
-<summary style="color: #4ba9cc">Adding a database for old and illegitimate tokens</summary>
+<summary style="color:#4ba9cc">Adding a database for old and illegitimate tokens</summary>
 </details>
 
 <details>
-<summary style="color: #4ba9cc">Adding our security specification to our openAPI</summary>
+<summary style="color:#4ba9cc">Adding our security specification to our openAPI</summary>
 </details>
 

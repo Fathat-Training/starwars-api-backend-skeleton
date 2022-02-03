@@ -7,7 +7,7 @@
 
 ---
 ### Stage 1: 
-<span style="color: #FF1B55FF">API Foundation - app, endpoint - Api specification</span>
+<span style="color:#FF1B55FF">API Foundation - app, endpoint - Api specification</span>
 
 #### Description: 
 Getting Flask running and creating our first API call, defining the required OpenApi Yaml configuration for it.
@@ -15,7 +15,7 @@ Connecting that to our endpoint and finally running it.
 
 <details>
 
-<summary style="color: #4ba9cc">1. Get flask running</summary>
+<summary style="color:#4ba9cc">1. Get flask running</summary>
    <br/><br/>
    Copy the following code and place it in main.py in the root folder. 
 
@@ -68,7 +68,7 @@ Connecting that to our endpoint and finally running it.
 </details>
 
 <details>
-<summary style="color: #4ba9cc">2. Add our first endpoint for the API</summary> 
+<summary style="color:#4ba9cc">2. Add our first endpoint for the API</summary> 
 
    Our first endpoint is a films endpoint
    <br/><br/>
@@ -279,7 +279,7 @@ components:
 </details>
 
 <details>
-<summary style="color: #4ba9cc">3. Add the connection between our openapi.yaml specification and our first film endpoint.</summary>
+<summary style="color:#4ba9cc">3. Add the connection between our openapi.yaml specification and our first film endpoint.</summary>
    
    Now we understand the openapi.yaml specification for our API call's Request and Response let's add the connection (connexion) between our openapi.yaml specification and our first film endpoint.
    Copy the following code and replace everything in main.py with this new code. 
@@ -412,7 +412,7 @@ components:
 </details>
 
 <details>
-<summary style="color: #4ba9cc">4.Add our API Response</summary>
+<summary style="color:#4ba9cc">4.Add our API Response</summary>
   
    Copy the following code into the basehandler.py
 

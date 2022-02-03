@@ -7,13 +7,13 @@
 
 ---
 ### Stage-2:
-<span style="color: #FF1B55FF">Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>
+<span style="color:#FF1B55FF">Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>
 
 #### Description: 
 Develop a module that will provide access to the Star Wars API and connect that to our Films endpoint via a data access layer and introduce our API error handling..
 <br/><br/>
 <details>
-<summary style="color: #4ba9cc">1. Build an interface to the 'https://swapi.py4e.com/api/' api to retreive data about Star Wars.</summary>
+<summary style="color:#4ba9cc">1. Build an interface to the 'https://swapi.py4e.com/api/' api to retreive data about Star Wars.</summary>
 
    For this module we shall build a class, a star wars object that provides us access to an external source of Star Wars data.
    <br/><br/>
@@ -295,7 +295,7 @@ Hopefully you have understood what's happening now and are ready to move on, but
 </details>
 
 <details>
-<summary style="color: #4ba9cc">2. Adding access to the above code for the endpoint via a DataAccess layer.</summary>
+<summary style="color:#4ba9cc">2. Adding access to the above code for the endpoint via a DataAccess layer.</summary>
 
 We now have a gateway to the external Star Wars API data, but we need someway of connecting to that from our endpoint. This is where our data access layer comes into play.
 As mentioned in the introduction, we use a data access layer as a means to separate dealing with our data sources. This helps us maintain a robust structure and minimises maintenance, redundancy and refactoring.
@@ -508,7 +508,7 @@ Here's what's happening line by line.
 </details>
 
 <details>
-<summary style="color: #4ba9cc">3. Introduce our options_filter function in our utils.py file</summary>
+<summary style="color:#4ba9cc">3. Introduce our options_filter function in our utils.py file</summary>
 
 We already understand what our options_filter function has to do, now let's look at the code and see how it does it.
 
@@ -612,7 +612,7 @@ Let's go through what's happening step by step.
 </details>
 
 <details>
-<summary style="color: #4ba9cc">4. Add our error handling for exceptions</summary>
+<summary style="color:#4ba9cc">4. Add our error handling for exceptions</summary>
 
 As we have seen in the various blocks of code there are numerous exception possibilities. We need to present these exceptions in
 a standard manner for both us the developers and the client. 
@@ -841,7 +841,7 @@ Try setting some of the options to false and get different films up, by changing
 
 <details>
 
-<summary style="color: #4ba9cc">5. Introduce our second film endpoint, the associated data access method and the openAPi spec for this endpoint</summary>
+<summary style="color:#4ba9cc">5. Introduce our second film endpoint, the associated data access method and the openAPi spec for this endpoint</summary>
 
 Whoa! We are nearly there, but not quite.
 
