@@ -75,6 +75,6 @@ Building Our API
 <br/>
 [<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](exercise.md)
 <br/>
-[<span style="color:#4ba9cc">Stage 4 - Adding Authorisation</span>](auth.md)
+[<span style="color:#4ba9cc">Stage 4 - Adding Authentication</span>](auth.md)
 <br/>
 [<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](users.md)
