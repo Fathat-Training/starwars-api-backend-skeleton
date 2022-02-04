@@ -873,6 +873,8 @@ def select_secret(payload: dict) -> str | bool:
 
 Next Function - permissions
 
+<-- TODO: Move this to the end to the "Adding authentication checks to our endpoints" section -->
+
 ```python
 def permission(payload: dict, access_role: str, logout=False) -> bool:
     """
@@ -1141,14 +1143,17 @@ security:
 
     It's as simple as that, we just mark any endpoint that we want authentication for.
     
-    Copy this secuirty specification to the 'components' part of the openAPi specification.
+    Copy this security specification to the 'components' part of the openAPi specification.
 
 </details>
 
 <details>
-<summary style="color:#4ba9cc">Adding authentication checks to our endpoints</summary>
+<summary style="color:#4ba9cc">Adding authorisation checks to our endpoints</summary>
 
-    Finally, we need to add some form of authentication control to the endpoints to check access roles.
+    At this point, we have code to generate (and sign) a token and verify the token and obtain the claims in it.
+    The changes in the yaml file above will ensure that each endpoint will be called *only if* the token in the request is verified. But this is not enough, we also need to make sure the user can access only the endpoints it is allowed to access.
+
+     Finally, we need to add some form of authorisation control to the endpoints to check access roles.
     Let's use our 'get_films' endpoint to show how this is done:
 
 ```python
@@ -1188,7 +1193,7 @@ permission(kwargs['token_info'], access_role='basic')
 
     We'll be using this function more when it comes to our 'users'
 
-    That's a wrap for our authentication section. Take your time to goi over what we have done and ensure a comprehensive 
+    That's a wrap for our authentication section. Take your time to go over what we have done and ensure a comprehensive 
     understanding.
 
 </details>
