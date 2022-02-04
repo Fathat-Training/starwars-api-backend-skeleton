@@ -907,10 +907,287 @@ section.
 </details>
 
 <details>
-<summary style="color:#4ba9cc">Adding a database for old and illegitimate tokens</summary>
+<summary style="color:#4ba9cc">Adding the Redis database utilities for tokens</summary>
+
+We are going to add nour redis database code for saving and fetching all tokens that have been revoked.
+
+We have already installed our Redis database during the setup process of this project. Now we shall add the required functionality:
+
+
+#### Imports
+
+```python
+# ------------------------------------------------
+#    External imports
+# ------------------------------------------------
+import redis
+from redis import ResponseError, ConnectionError
+
+# ------------------------------------------------
+#    Python Imports
+# ------------------------------------------------
+import logging
+
+# ------------------------------------------------
+#    Module Imports
+# ------------------------------------------------
+from errors.v1.handlers import ApiError
+from config.v1.app_config import REDIS
+
+
+```
+    The imports above import everything we need to handle our redis database.
+    
+    Copy this code into database/redis/rd_utils.py
+
+Now let's look at the core 'Redis' class RedisConnect
+```python
+
+# ------------------------------------------------
+#    Redis Class
+# ------------------------------------------------
+
+class RedisConnect(object):
+    """
+        Connects to our Redis database
+
+    :return:
+    """
+    
+    def __init__(self):
+        self.connect_data = REDIS
+        try:
+            self.connection = redis.Redis(REDIS['host'], REDIS['port'], REDIS['db'], REDIS['password'])
+            self.check_connection()
+        except redis.AuthenticationError:
+            # We could use an HTTP error status code of 500 or 503
+            logging.error("Redis Authentication Error %s" % self.connect_data['db'], exc_info=True)
+            raise ApiError(message="service unavailable", status_code=503)
+
+    def check_connection(self):
+        try:
+            self.connection.randomkey()
+            logging.info("Connected to Redis[db:%s] on %s:%s" % (self.connect_data['db'], self.connect_data['host'], self.connect_data['port']), exc_info=False)
+        except ConnectionError as e:
+            logging.error("Cannot connect to Redis[db:%s] on %s:%s" % (self.connect_data['db'], self.connect_data['host'], self.connect_data['port']), exc_info=False)
+            
+    def bgsave(self):
+        """
+            Asynchronously save the Redis db on disk
+            In the case of an error during saving - Do not cause an exception - just log
+        """
+        if self.connection.bgsave():
+            logging.info("Redis[db:%s] saved successfully" % self.connect_data['db'], exc_info=False)
+        else:
+            logging.error("Redis[db:%s] was NOT saved successfully" % self.connect_data['db'], exc_info=True)
+
+    def set(self, k):
+        """
+            Save a Key/Value pair to the Redis cache
+        :return:
+        """
+
+        try:
+            self.connection.set(k, 1)
+            self.bgsave()
+        except ResponseError as e:
+            logging.error("Redis did not save the key %s" % k, exc_info=True)
+            raise ApiError(message="service unavailable", status_code=503)
+
+    def get(self, k):
+        """
+            Return a Key/Value pair from the Redis cache where the k is a name
+        :
+        :return:
+        """
+        try:
+            return self.connection.get(k)
+        except Exception:
+            raise ApiError(message="service unavailable", status_code=503)
+
+
+# This is a pointer to the class RedisConnect above and can be imported by modules
+# using - from database.redis.rd_utils import redis_connection
+redis_connection = RedisConnect()
+
+```
+
+    This class holds all the helper functions for connecting to our 'Redis' database, saving and fetching revoked tokens.
+
+The initialisation function - __init__
+
+    This method takes our database configuration data from the config/app_config file aka imports above, and attempts a
+    connection with our redis database.
+
+    Note: The redis database should be running at this point.
+
+    If successful it calls the class method 'check_connection' just to make sure we have access. If this fails we log an error,
+    but do not raise an API Exception. We obviously need to check what is blocking the connection here, and our attention shall
+    be focused if an exception occurs when we attempt access to the database.
+
+    If it cannot connect at all we do raise an exception.
+    
+Next Function - bgsave
+
+    This is a helper function that simply save the redis data to the disk in a background task. Redis automatically does this
+    from time to time, but for extra consistency we shall call this function everytime we save a token.
+
+Next Function - set
+
+    This function is what we call when we are revoking a token from our authentication code.
+
+    It takes a key 'k' as a parameter. In our API that key is the token we want to save. We then save this key with a value of 1. 
+    We could use any value here as we are only really interested int he token key, but because redis requires a value for a key 
+    a binary 1 (True) seems appropriate.
+
+    If 'Redis' is running ok the token will get saved, if it is not we raise an exception.
+
+Next Function - get 
+
+    This again takes the token as a parameter key 'k' and tries to get that key from the database.
+    If 'Redis' is running ok it returns True or False, if it is not we raise an exception.
+
+That's it for the class methods.
+
+The one last declaration we need is to define the variable 'redis_connection' and assign it a RedisConnect class instance.
+We do this outside of the class as we don't really want to instantiate a new class whenever we need access to our redis database.
+
+```python
+redis_connection = RedisConnect()
+```
+
+    As usual, make sure you have copied all of the code above to the file database/redis/rd_utils.py
+    That's a wrap on our 'Redis' database functionality.
+
 </details>
 
 <details>
 <summary style="color:#4ba9cc">Adding our security specification to our openAPI</summary>
+
+    Before we can make use of our authentication we need to add a few details to our openAPI specification in our openap.yaml file.
+
+```yaml
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: auth.endpoints.decode_token
+```
+
+    This is our openAPI security schema. It is appropriatesly named jwt and as you can see it specifies that we are using JWT as the bearerFormat, 
+    and points to a functionto call to pass the token to, i.e. 'auth.endpoints.decode_token'. Remweber that 'connexion' will retrieve
+    this schema and understand that it is a JWT authentication schema, will then take the token passed in the request and pass it to the function.
+
+    Notice also the 'type'. Here we are stating http as we will not be using any TLS (Transport Layer Security) for our project as it is deployed on our local machines.
+    However, if we want to move this project to a server we would use TLS and change the 'type' to https.
+
+    Now that we have our security schema we can mark enpoints that we require authentication for.
+
+    As an example let's mark our 'films' endpoint - /films/v1/ as requiring security. 
+
+    All we have to do is add the following below the endpoint specification:
+
+```yaml
+security:
+  - jwt: []
+```
+
+    so we end up with this:
+
+```yaml
+ /films/v1/:
+
+    get:
+      summary: Retrieve a list of star wars films - Requires login.
+      tags:
+        - Films
+      description: >
+
+        Required Headers:
+
+            Authorization request header
+
+              Bearer Valid Admin Access Token
+
+        Errors:
+
+            token-invalid, 401
+            authorisation-required, 401
+            not-found, 404
+
+      operationId: films.v1.endpoints.get_films
+      parameters:
+        - name: "options"
+          in: query
+          description: Optional Film Data
+          required: false
+          style: deepObject
+          schema:
+            $ref: '#/components/schemas/FilmExtras'
+
+      responses:
+        '200':
+          description: Returns a data object containing a list of Film entities
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilmListResponse'
+
+      security:
+        - jwt: []
+```
+
+    It's as simple as that, we just mark any endpoint that we want authentication for.
+    
+    Copy this secuirty specification to the 'components' part of the openAPi specification.
+
 </details>
 
+<details>
+<summary style="color:#4ba9cc">Adding authentication checks to our endpoints</summary>
+
+    Finally, we need to add some form of authentication control to the endpoints to check access roles.
+    Let's use our 'get_films' endpoint to show how this is done:
+
+```python
+
+def get_films(**kwargs):
+    """
+        Fetch all the films via pagination. If there is a cursor then fetch the next batch of films
+
+    :param kwargs: dictionary object containing keyword arguments
+    :return: List of Film Entities and total film count
+    :errors:
+    """
+    permission(kwargs['token_info'], access_role='basic')
+    films, count = FilmDacc.films(kwargs['options'])
+
+    if films:
+        return api_response({
+            'results': films,
+            'count': count
+        })
+    else:
+        raise ApiError('films-not-found', status_code=404)
+```
+
+    You already have this endpoint in films/v1/endpoints.py. However, there is one line missing:
+
+```python
+permission(kwargs['token_info'], access_role='basic')
+```
+
+    This is the function that is called before any code on an authenticated endpoint.
+    You should remember this from earlier when coding the JWT core functionality. Also, you should recall how the 'token_info'
+    data arrives in the kwargs (keyword arguments). That's right, 'connexion'!
+
+    To summarise this function verifies the paylaod and checks the access role required for the endpoint, which as you can see is clearly stated above as 'basic' 
+    and compares it to the access role contained in the payload. 
+
+    We'll be using this function more when it comes to our 'users'
+
+    That's a wrap for our authentication section. Take your time to goi over what we have done and ensure a comprehensive 
+    understanding.
+
+</details>
