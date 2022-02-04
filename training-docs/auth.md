@@ -1193,5 +1193,5 @@ permission(kwargs['token_info'], access_role='basic')
 </details>
 
 <details>
-<summary style="color:#4ba9cc">Testing</summary>
+<summary style="color:#ffc300">Testing</summary>
 </details>
