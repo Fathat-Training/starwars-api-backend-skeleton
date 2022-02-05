@@ -17,7 +17,7 @@
     We shall develop our authentication process for users to be able to access certain endpoints of our API
     only when they have signed up and logged in. We'll be using JWT (Json Web Tokens) to handle the anatomy of our authentication process.
 
-    Using a JWT package we shall create and manage the use of the required access tokens on behalf of each user or admin user. These tokens are generated and returned on Signup
+    Using a JWT package we shall create and manage the use of the required access tokens on behalf of each regular user or admin user. These tokens are generated and returned on Signup
     and Login and for email and password endpoints. They are then returned in the response body to the client who will need to store these tokens somewhere and pass them in the
     request header as described in API Requests.
 
@@ -43,7 +43,7 @@ Summary of objectives:
     APIs use JWT to facilitate authentication between clients and the API backend. With JWT it is fairly straight forward to create different 
     tokens for different uses. For example, standard authentication, email renewal, password resets etc. etc.
 
-    Because of its relatively small size, a JWT can be sent through a URL, through a POST parameter, or inside an HTTP header, and it is transmitted quickly. 
+    Because of its relatively small size, a JWT can be sent through a POST parameter or inside an HTTP header, and it is transmitted quickly. 
     A JWT contains all the required information about an entity to avoid querying a database on every access to the service in question.
 
     On receipt of a JWT there is no need to call a server to validate the token. The token can be easily validated and decoded.
@@ -52,7 +52,7 @@ Summary of objectives:
 
 ##### Anatomy of a JWT
 
-    A JWT token consists of three . separate components in the form
+    A JWT token consists of three components, separated by comma (,) in the form
   
  	    header.payload.signature
 
@@ -73,13 +73,11 @@ Summary of objectives:
          "alg" = the hashing algorithm to use for encoding/decoding
         
          "typ" = "JWT"
-        
-         "iat" = Integer representing date of token creation in seconds
 
  ##### JWT Payload:
 
     The payload is the part where we use what are called claims.
-    Claims are statements about some entity - i.e. Users.
+    Claims are statements about some entity - i.e. Users. You can think of each claim as a key-value pair and the payload as a dictionary (in fact we will use a Python dictionary to represent it as we will see soon). For example, the subject claim has the "sub" key and a *string* id of the subject as the value (typically used to identify the session). 
  
     There are three types of claim, registered, public, and private.
 
@@ -88,8 +86,9 @@ Summary of objectives:
     Registered Claims:
 
         1. sub (randomly generated id)
-        2. exp (expiration time - to be decided)
-        3. iss (issuing party - who issued the token)
+        2. iat (issued at time - Integer representing date of token creation in seconds)
+        3. exp (expiration time - to be decided)
+        4. iss (issuing party - who issued the token)
         others...
 
     Public Claims:
@@ -136,7 +135,7 @@ Summary of objectives:
 <summary style="color:#4ba9cc">Understanding the Authentication Flow</summary>
 
     An authentication flow in an API relates to the access of data or actions on that data that is allowed by any one endpoint. 
-    For example, some endpoints that can 'Delete' or perform other adminsitrative actions on data will require a different/higher 
+    For example, some endpoints that can 'Delete' or perform other administrative actions on data will require a different/higher 
     level of access. Endpoint access is of course related to user access, regardless of the users being people or systems.
 
     Applications can have a varying number of authentication levels. A Typical system might have a basic access and an admin access.
@@ -146,23 +145,23 @@ Summary of objectives:
     Even different actions across a system by the same user may require different tokens. As mentioned previously, resetting emails and passwords
     is a good example of this.
     
-    Generally, each level of authentication carries private payload calims specific to the task at hand.
+    Generally, each level of authentication carries private payload claims specific to the task at hand.
 
-    For example, a token that enables user access to an endpoint to reset their password might have a claim called resetPassword.
-    Private claims are there to differnetiate the tokens for both clients and services.
+    For example, a token that enables user access to an endpoint to reset their password might have a claim called resetPassword. The code in the server checks the claim and makes sure that the token can be used to authorize only the password change operations, not others. 
+    Private claims are there to differentiate the tokens for both clients and services.
 
 ##### The typical flow of authentication for our API can be seen below
 
 ![](images/api-flow.drawio.png)
 
-    At this level it is fairly straight forward. If an endpoint is secured, i.e. it needs authentication to access it then a token should be included in the request. This
+    At this level it is fairly straight forward. If an endpoint is secured, i.e. it needs authentication to access it then a token should be included in the request.
 
     The way things normally work is as follows:
 
-    * A client will first sign-up to a service with a set of credentials
+    * A client will first sign-up to a service with a set of credentials (username and password)
     * After signup is complete the client will not yet have an access token, first they need to login
-    * The client logs in to the system and if successful receives their access token which will need
-      to be sent for every request that wants to access a secured endpoint.
+    * The client logs in to the system with the username and password used in the signup step, and if successful, receives their access token. The client stores the access token locally (eg. in the browser's storage) and it will need
+      to send it for every request that wants to access a secured endpoint.
 
     How we apply security to our endpoints is two fold.
 
@@ -172,7 +171,7 @@ Summary of objectives:
     Thus, no endpoint will even be reached if it requires authorisation and there is no appropriate token in the Api request from the client.
     The request generates an error response. But if there is a token and it is valid, the end point is reached and the permissions checked.
     
-    Checking permissions is checking access roles. It is important to remind ourselves once more that regardless of whether a token is sent from the client or from
+    Checking permissions is checking access roles (this is also called authorisation). It is important to remind ourselves once more that regardless of whether a token is sent from the client or from
     it must carry the correct claims for the appropriate access to the endpoint.
 
     
@@ -263,7 +262,7 @@ Let's start with the way we are going to encrypt our tokens
     using a cryptographic hash function like SHA-256. The result is a code that can be used to verify a message only if
     both the generating and verifying parties know the secret.
 
-    The following are a bunch of secret hashes that have been pre-generated.
+    The following are a bunch of secrets that have been pre-generated. The secrets below are in hexadecimal notation, so each is 32 digits * 4 = 128-bit long. 
 
     
 ```python
@@ -301,7 +300,7 @@ JWT_PASSWORD_SECRET = "0f8014e60a33413b8f1ef6c414a1de15"
 #### Payloads 
 
 
-    The following is a set of private payload claims described previously 
+    The following is a set of private payload claims described previously. Our code will verify that the token sent from the client contains these claims in its payload.
 
 ```python
 # ---------------------------------------------------
@@ -327,7 +326,7 @@ JWT_REFRESH_PAYLOAD_CLAIM = ['user_id', 'refresh_claim']
 #### Token Time To Live
 
     Here, we set default expiration times, in hours, for each type of token. When a token expires it should no longer be accepted by the API.
-    We will discover hgow we do this when we write the code.
+    We will discover how we do this when we write the code.
 
 ```python
 # Number of hours a standard API usage token lasts
@@ -339,7 +338,7 @@ JWT_PASSWORD_HOURS = 1
 # Number of hours an API email token lasts
 JWT_EMAIL_HOURS = 1
 ```
-    Copy that data over to the config file and for now I think we're done with configuration, although we will be coming back later..
+    Copy that data over to the app_config.py file and for now I think we're done with configuration, although we will be coming back later..
 
 </details>
 
@@ -401,7 +400,7 @@ def decode_token(token: str) -> dict:
 
     The 'decode' token function takes the token passed by 'connexion' and performs two tasks:
 
-    * It calls the is_revoked function to check if the token has been revoked for some reason. If it has it'll raise an API error.
+    * It calls the is_revoked function to check if the token has been revoked for some reason. Revoking basically means invalidating the token, marking the token not usable any more. If it has it'll raise an API error.
     * If the token has not been revoked it retrieves the payload from the token via decode_auth_token and returns it to 'connexion'.
       There are a couple of caveats handled in the function too. These are token expiration and invalidaty, both of which will raise
       errors.
@@ -481,7 +480,7 @@ def access_roles() -> dict:
     The function access_roles returns a simple dictionary with two key-value pairs.
 
     As you can see the 'basic' has a value of 1 and 'admin' is 2. What this implies is that basic is less than admin.
-    Doing this allows us to set a minimum access privaledge to our endpoints. It's not as visibile with just two roles but imagine
+    Doing this allows us to set a minimum access priviledge to our endpoints. For example, if we set the priviledge level of an endpoint as `basic` (1), roles with the same or higher number (including `admin`) can access itl if we set the level of an endpoint as `admin` (2), the `basic` role cannot access it as its level (1) is lower. In this way, we can implement the priviledge check as a simple integer comparison. It's not as visibile with just two roles but imagine
     there are numerous access roles ranging with values from 1 to n. If an endpoint requires an access role called for example, 
     'premium' then any access role with a value higher than 'premium' could also access that endpoint. 
 
@@ -501,6 +500,8 @@ from database.redis.rd_utils import redis_connection
     'Redis', is an in memory database so it's very fast. We'll cover 'Redis' and it's setup in the next section.
 
 ok, let's move on to our first and primary function in our code. The function that creates the Tokens
+
+<!-- TODO: Move this before the decode_token function, to start with generating the token and then move to verifying the token -->
 
 ```python
 # ----------------------------
@@ -872,6 +873,8 @@ def select_secret(payload: dict) -> str | bool:
 
 Next Function - permissions
 
+<-- TODO: Move this to the end to the "Adding authentication checks to our endpoints" section -->
+
 ```python
 def permission(payload: dict, access_role: str, logout=False) -> bool:
     """
@@ -1140,14 +1143,17 @@ security:
 
     It's as simple as that, we just mark any endpoint that we want authentication for.
     
-    Copy this secuirty specification to the 'components' part of the openAPi specification.
+    Copy this security specification to the 'components' part of the openAPi specification.
 
 </details>
 
 <details>
-<summary style="color:#4ba9cc">Adding authentication checks to our endpoints</summary>
+<summary style="color:#4ba9cc">Adding authorisation checks to our endpoints</summary>
 
-    Finally, we need to add some form of authentication control to the endpoints to check access roles.
+    At this point, we have code to generate (and sign) a token and verify the token and obtain the claims in it.
+    The changes in the yaml file above will ensure that each endpoint will be called *only if* the token in the request is verified. But this is not enough, we also need to make sure the user can access only the endpoints it is allowed to access.
+
+     Finally, we need to add some form of authorisation control to the endpoints to check access roles.
     Let's use our 'get_films' endpoint to show how this is done:
 
 ```python
@@ -1187,7 +1193,7 @@ permission(kwargs['token_info'], access_role='basic')
 
     We'll be using this function more when it comes to our 'users'
 
-    That's a wrap for our authentication section. Take your time to goi over what we have done and ensure a comprehensive 
+    That's a wrap for our authentication section. Take your time to go over what we have done and ensure a comprehensive 
     understanding.
 
 </details>
