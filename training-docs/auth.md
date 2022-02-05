@@ -1215,13 +1215,13 @@ Ok, so let's run the application and go to our API page in the browser, making s
 
 You will see the following:
 
-![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/films-with-authentication.png)
+![](images/films-with-authentication.png)
 
     Notice the unlocked padlock to the far right of the endpoint head. This states that we require some form of authentication to use this endpoint.
 
     Click 'Try it out' and then execute and see what happens.
 
-![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/films-auth-required.png)
+![](images/films-auth-required.png)
 
     As you can see because we haven't input a token, it's telling us there was a 401 Error  - UNAUTHORISED. And in the response it tells us that
     'No authorization token provided'
