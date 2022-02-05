@@ -35,7 +35,7 @@ The Character endpoint for retrieving all Characters should allow the following 
 2. batch_size - The number of Characters to retrieve from a single request to the external Star Wars API.
 
 Tip: The above two parameters are already handled in the Star Wars API code - check it out again
-     You need to define them for the API specification and the endpoints and pass them along so that they
+     You need to define them for the API specification and the endpoints (**Under 'components') and pass them along so that they
      reach the Star Wars API.
 
 You have two days to figure this out - so let's get cracking.

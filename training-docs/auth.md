@@ -262,9 +262,22 @@ Let's start with the way we are going to encrypt our tokens
     using a cryptographic hash function like SHA-256. The result is a code that can be used to verify a message only if
     both the generating and verifying parties know the secret.
 
-    The following are a bunch of secrets that have been pre-generated. The secrets below are in hexadecimal notation, so each is 32 digits * 4 = 128-bit long. 
+```python
+# ---------------------------------------------------
+# JWT Json Web Tokens
+# ---------------------------------------------------
+JWT_ISSUER = "fathat.org"
+JWT_ALGORITHM = "HS256"
+```
 
-    
+    The issuer is in this case us, well actually FatHat.org.
+    The algorithm as can be seen is the HS256.
+
+    ok, go ahead and copy the code directly above to the app_config.py file. We'll then add the secrects directly below.
+
+#### Secrets
+    The following are a bunch of secrets that have been pre-generated. The secrets below are in hexadecimal notation, so each is 32 digits * 4 = 128-bit long.
+
 ```python
 # Default secret used to create all new access JWTs
 JWT_SECRET = "0f8014e60a33413b8f1ef6c414a5ed86"
@@ -279,23 +292,8 @@ JWT_PASSWORD_SECRET = "0f8014e60a33413b8f1ef6c414a1de15"
 ```
 
     We use the appropriate secret to match the kind of token we are generating.
-
-    However before we start adding these to our config file we have to add the issuer and the algorithm. As a matter of fact it
-    doesn't really matter in which order you add config data, but we should try to order things as appropriatly as possible.
-
-```python
-# ---------------------------------------------------
-# JWT Json Web Tokens
-# ---------------------------------------------------
-
-    JWT_ISSUER = "fathat.org"
-    JWT_ALGORITHM = "HS256"
-```
-
-    The issuer is in this case us, well actually FatHat.org.
-    The algorithm as can be seen is the HS256.
-
-    ok, go ahead and copy the code directly above to the app_config.py file. We'll then add the secrects directly below.
+    
+    Copy the secrets to the config file
 
 #### Payloads 
 
@@ -317,7 +315,6 @@ JWT_PASSWORD_PAYLOAD_CLAIM = ['user_id', 'password_claim']
 # Default claims payload for refresh JWTs
 JWT_REFRESH_PAYLOAD_CLAIM = ['user_id', 'refresh_claim']
 
-
 # --------------------------------------------------
 ```
 
@@ -331,12 +328,16 @@ JWT_REFRESH_PAYLOAD_CLAIM = ['user_id', 'refresh_claim']
 ```python
 # Number of hours a standard API usage token lasts
 JWT_ACCESS_HOURS = 10
+
 # Number of hours an API refresh token lasts
 JWT_REFRESH_HOURS = 24 
+
 # Number of hours an API password token lasts
 JWT_PASSWORD_HOURS = 1
+
 # Number of hours an API email token lasts
 JWT_EMAIL_HOURS = 1
+
 ```
     Copy that data over to the app_config.py file and for now I think we're done with configuration, although we will be coming back later..
 
@@ -410,7 +411,7 @@ def decode_token(token: str) -> dict:
     Notice that we are using our configuration data by importing the JWT_SECRET from our config file. This is passed to the decode function
     so that it knows what secrect to use for decoding.
 
-    Copy the code to auth/core.py
+    Copy the code to auth/endpoints.py
 
 Now let's move on to our core authentication code.
 
@@ -428,7 +429,7 @@ import sys
 import os
 
 # ----------------------------
-#  Third Party Imports
+#  External Imports
 # ----------------------------
 import jwt
 
@@ -497,7 +498,7 @@ from database.redis.rd_utils import redis_connection
     This line tells us that we are using the 'Redis' nosql database. As will be shown, we use 'Redis' to store our
     invalid tokens. We check our incoming tokens against those contained in the database each time we receive a request.
     
-    'Redis', is an in memory database so it's very fast. We'll cover 'Redis' and it's setup in the next section.
+    'Redis', is an in memory database so it's very fast. We'll cover 'Redis' and how we access it in the next section.
 
 ok, let's move on to our first and primary function in our code. The function that creates the Tokens
 
@@ -1067,7 +1068,8 @@ redis_connection = RedisConnect()
 <details>
 <summary style="color:#4ba9cc">Adding our security specification to our openAPI</summary>
 
-    Before we can make use of our authentication we need to add a few details to our openAPI specification in our openap.yaml file.
+    Before we can make use of our authentication we need to add a few details to our openAPI specification
+    in our openap.yaml file, under 'components' before 'schemas.
 
 ```yaml
   securitySchemes:
@@ -1079,7 +1081,7 @@ redis_connection = RedisConnect()
 ```
 
     This is our openAPI security schema. It is appropriatesly named jwt and as you can see it specifies that we are using JWT as the bearerFormat, 
-    and points to a functionto call to pass the token to, i.e. 'auth.endpoints.decode_token'. Remweber that 'connexion' will retrieve
+    and points to a functionto call to pass the token to, i.e. 'auth.endpoints.decode_token'. Remember that 'connexion' will retrieve
     this schema and understand that it is a JWT authentication schema, will then take the token passed in the request and pass it to the function.
 
     Notice also the 'type'. Here we are stating http as we will not be using any TLS (Transport Layer Security) for our project as it is deployed on our local machines.
@@ -1153,7 +1155,7 @@ security:
     At this point, we have code to generate (and sign) a token and verify the token and obtain the claims in it.
     The changes in the yaml file above will ensure that each endpoint will be called *only if* the token in the request is verified. But this is not enough, we also need to make sure the user can access only the endpoints it is allowed to access.
 
-     Finally, we need to add some form of authorisation control to the endpoints to check access roles.
+    Finally, we need to add some form of authorisation control to the endpoints to check access roles.
     Let's use our 'get_films' endpoint to show how this is done:
 
 ```python
@@ -1188,6 +1190,14 @@ permission(kwargs['token_info'], access_role='basic')
     You should remember this from earlier when coding the JWT core functionality. Also, you should recall how the 'token_info'
     data arrives in the kwargs (keyword arguments). That's right, 'connexion'!
 
+    Copy the following the line and place it as in the code above, so it is the first line that executes in the endppoint.
+    
+    Now copy import line for this function and place it under 'Module Imports' in the same file.
+
+```python
+from auth.core import permission
+```
+
     To summarise this function verifies the paylaod and checks the access role required for the endpoint, which as you can see is clearly stated above as 'basic' 
     and compares it to the access role contained in the payload. 
 
@@ -1200,4 +1210,25 @@ permission(kwargs['token_info'], access_role='basic')
 
 <details>
 <summary style="color:#ffc300">Testing</summary>
+
+Ok, so let's run the application and go to our API page in the browser, making sure we refresh it.
+
+You will see the following:
+
+![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/films-with-authentication.png)
+
+    Notice the unlocked padlock to the far right of the endpoint head. This states that we require some form of authentication to use this endpoint.
+
+    Click 'Try it out' and then execute and see what happens.
+
+![](/Users/chezx/Development/fathat-training/101-coding-projects/Starwars/startwars-teaching-repos/api-python-backend/skeleton/training-docs/images/films-auth-required.png)
+
+    As you can see because we haven't input a token, it's telling us there was a 401 Error  - UNAUTHORISED. And in the response it tells us that
+    'No authorization token provided'
+
+    With our authentication and authorisation now firrmly in place we can move on to our final stage of adding users and start to generate
+    tokens and see how it really works.
+
 </details>
+
+[<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](users.md)
