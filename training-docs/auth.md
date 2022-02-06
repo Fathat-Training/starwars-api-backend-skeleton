@@ -1190,7 +1190,7 @@ permission(kwargs['token_info'], access_role='basic')
     You should remember this from earlier when coding the JWT core functionality. Also, you should recall how the 'token_info'
     data arrives in the kwargs (keyword arguments). That's right, 'connexion'!
 
-    Copy the following the line and place it as in the code above, so it is the first line that executes in the endppoint.
+    Copy the following line and place it as in the code above, so it is the first line that executes in the endppoint.
     
     Now copy import line for this function and place it under 'Module Imports' in the same file.
 
