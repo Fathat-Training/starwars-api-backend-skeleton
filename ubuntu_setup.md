@@ -41,6 +41,8 @@ sudo mysql_secure_installation
 sudo systemctl status mysql.service
 # This will print the MySQL version
 sudo mysqladmin -p -u root version
+# You should be able to login now (type "quit" to exit):
+sudo mysql
 
 # Redis server
 sudo apt install -y redis
@@ -83,7 +85,8 @@ Open shell with `multipass shell ubuntu`.
 ```bash
 # This will print the IP address of your virtual machine.
 # Copy the IP address of the eth0 interface to clipboard.
-ip addr
+# For example "172.18.206.97"
+ip addr show label eth0 | grep "inet "
 cd /mnt/github
 python3 -m http.server 8080
 ```
