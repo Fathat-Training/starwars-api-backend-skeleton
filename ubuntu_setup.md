@@ -31,7 +31,7 @@ sudo apt install -y git
 # Python
 sudo apt install -y software-properties-common
 sudo add-apt-repository ppa:deadsnakes/ppa
-sudo apt install -y python3.10
+sudo apt install -y python3.10 python3-pip build-essential libssl-dev libffi-dev python-dev python3-venv
 
 # MySQL server
 sudo apt install -y mysql-server
@@ -95,3 +95,15 @@ Open browser (eg. Chrome, Firefox) on your host machine and enter this address: 
 
 Replace `<IP>` with the IP address you copied to the clipboard.
 You will see the directory listing of your GitHub directory.
+
+## Set up environment for starwars-api
+
+```bash
+cd ~
+python3 -m venv ./venv
+cd ./venv
+source bin/activate
+cd /mnt/github/starwars-api-backend-skeleton
+python3 -m pip install -r requirements.txt
+python3 main.py
+```
