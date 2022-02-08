@@ -1066,7 +1066,7 @@ redis_connection = RedisConnect()
 </details>
 
 <details>
-<summary style="color:#4ba9cc">Adding our security specification to our openAPI</summary>
+<summary style="color:#4ba9cc">Adding our security specifications to our openAPI</summary>
 
     Before we can make use of our authentication we need to add a few details to our openAPI specification
     in our openap.yaml file, under 'components' before 'schemas.
@@ -1078,16 +1078,26 @@ redis_connection = RedisConnect()
       scheme: bearer
       bearerFormat: JWT
       x-bearerInfoFunc: auth.endpoints.decode_token
+
+    jwt_refresh:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: auth.endpoints.decode_refresh_token
 ```
 
-    This is our openAPI security schema. It is appropriatesly named jwt and as you can see it specifies that we are using JWT as the bearerFormat, 
-    and points to a functionto call to pass the token to, i.e. 'auth.endpoints.decode_token'. Remember that 'connexion' will retrieve
-    this schema and understand that it is a JWT authentication schema, will then take the token passed in the request and pass it to the function.
+    There are two secuirty schemas. The first for standard access token authentication and the second for refresh token authorisation.
+    Whilst most secured endpoints will require a standard access token, there is a possibility at least one of our future user endpoints will require a refresh token.
+    
+    The schemas are appropriatesly named jwt and jwt_refresh, and as you can see specifiy that we are using JWT as the bearerFormat, and point to 
+    their relative functions which they pass the token to, i.e. 'auth.endpoints.decode_token' for a standard access token and 'auth.endpoints.decode_refresh_token'. 
+    Remember that 'connexion' will retrieve these schemas, understanding that they are JWT authentication schemas, will then take the token passed in the request 
+    and pass it to the function.
 
     Notice also the 'type'. Here we are stating http as we will not be using any TLS (Transport Layer Security) for our project as it is deployed on our local machines.
     However, if we want to move this project to a server we would use TLS and change the 'type' to https.
 
-    Now that we have our security schema we can mark enpoints that we require authentication for.
+    Now that we have our security schemas we can mark enpoints that we require authentication for.
 
     As an example let's mark our 'films' endpoint - /films/v1/ as requiring security. 
 
@@ -1096,6 +1106,11 @@ redis_connection = RedisConnect()
 ```yaml
 security:
   - jwt: []
+```
+    or 
+
+```yaml
+  - jwt_refresh: []
 ```
 
     so we end up with this:
