@@ -785,5 +785,5 @@ return api_response()
     But hold on a minute, all that work and we still have no data. Obviously we are missing something. Yes, you guessed it some route into the Star Wars Data.
     Which, takes us neatly into stage-2, Defining our Data Access layers and defining our interface to the Star Wars API.
 
-[<span style="color:#4ba9cc">Stage 2 - Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>](build-2.md)
+[<span style="color:#4ba9cc">Stage 2 - Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>](stage-2.md)
 </details>

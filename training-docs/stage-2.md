@@ -1000,6 +1000,6 @@ FilmListResponse:
 
 When you're done you you can continue with stage-3 
 
-[<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](exercise.md)
+[<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](stage-3.md)
 
 </details>

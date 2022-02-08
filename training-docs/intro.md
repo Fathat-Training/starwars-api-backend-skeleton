@@ -69,12 +69,12 @@ Have Fun! :)
 
 Building Our API
 
-[<span style="color:#4ba9cc">Stage 1 - API Foundation - app, endpoint - Api specification</span>](build-1.md)
+[<span style="color:#4ba9cc">Stage 1 - API Foundation - app, endpoint - Api specification</span>](stage-1.md)
 <br/>
-[<span style="color:#4ba9cc">Stage 2 - Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>](build-2.md)
+[<span style="color:#4ba9cc">Stage 2 - Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>](stage-2.md)
 <br/>
-[<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](exercise.md)
+[<span style="color:#4ba9cc">Stage 3 - Go it alone - Exercise</span>](stage-3.md)
 <br/>
-[<span style="color:#4ba9cc">Stage 4 - Adding Authentication</span>](auth.md)
+[<span style="color:#4ba9cc">Stage 4 - Adding Authentication</span>](stage-4.md)
 <br/>
-[<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](users.md)
+[<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](stage-5.md)

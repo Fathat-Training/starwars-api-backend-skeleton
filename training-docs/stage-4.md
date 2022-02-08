@@ -360,7 +360,7 @@ Let's look at the diagram below and see how our openApi spec, connexion, our aut
 
 As can be seen, connexion is our API gate-keeper. It does all the checks against the openAPI spec and handles the http requests and responses from the client.
 
-There are numerous ways we can start writing the code for our authentication method. But to keep this simple we will start with the basic authentication endpoint
+There are numerous ways we can start writing the code for our authentication methods. But to keep this simple we will start with the basic authentication endpoints
 called by connexion. 
 
 ```python
@@ -378,13 +378,13 @@ called by connexion.
 #  Module Imports
 # ------------------------------
 from auth.core import *
-from config.v1.app_config import JWT_SECRET
+from config.v1.app_config import JWT_SECRET, JWT_REFRESH_SECRET
 from errors.v1.handlers import ApiError
 
 
 def decode_token(token: str) -> dict:
     """
-        Standard Token decode function only.
+        Standard Token decode function.
         If we have a token and the token is not in cache - grab the payload
         Called directly via the openapi spec under  x-bearerInfoFunc: auth.endpoints.decode_token
 
@@ -397,9 +397,25 @@ def decode_token(token: str) -> dict:
         payload = decode_auth_token(token, JWT_SECRET)
         return payload
 
+
+def decode_refresh_token(token: str) -> dict:
+    """
+        Refresh Token decode function.
+        If we have a token and the token is not in cache - grab the payload
+        Called directly via the openapi spec under  x-bearerInfoFunc: auth.endpoints.decode_token
+
+    :param token:
+    :return:
+    """
+    if is_revoked(token):
+        raise ApiError('token-invalid', status_code=401)
+    else:
+        payload = decode_auth_token(token, JWT_REFRESH_SECRET)
+        return payload
+
 ```
 
-    The 'decode' token function takes the token passed by 'connexion' and performs two tasks:
+    The 'decode_token' function takes the token passed by 'connexion' and performs two tasks:
 
     * It calls the is_revoked function to check if the token has been revoked for some reason. Revoking basically means invalidating the token, marking the token not usable any more. If it has it'll raise an API error.
     * If the token has not been revoked it retrieves the payload from the token via decode_auth_token and returns it to 'connexion'.
@@ -411,11 +427,12 @@ def decode_token(token: str) -> dict:
     Notice that we are using our configuration data by importing the JWT_SECRET from our config file. This is passed to the decode function
     so that it knows what secrect to use for decoding.
 
+    The 'decode_refresh_token' does exactly the same but it passes a different secret to 'decode_auth_token'
     Copy the code to auth/endpoints.py
 
-Now let's move on to our core authentication code.
+Now let's move on to our core authentication code in auth/core.py
 
-We'll start from literally from the top.
+We'll start literally from the top.
 
 ```python
 # -*- coding: utf-8 -*-
@@ -1246,4 +1263,4 @@ You will see the following:
 
 </details>
 
-[<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](users.md)
+[<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](stage-5.md)

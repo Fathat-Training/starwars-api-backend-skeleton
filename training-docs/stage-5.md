@@ -458,6 +458,12 @@ For more on Base64 encoding you click the following link
     all we require is to tell the client that the status is ok such as we do with our signup and logout responses.
 
 ```yaml
+
+StatusOk:
+      type: string
+      description: Api call success
+      default: ok
+      
 SuccessResponse:
   type: object
   properties:
@@ -485,21 +491,19 @@ SuccessResponse:
 # ----------------------------
 
 # ----------------------------
-# Flask Imports
-# ----------------------------
-
-# ----------------------------
-# External Imports
-# ----------------------------
-
-# ----------------------------
-# Project Imports
+# Module Imports
 # ----------------------------
 from users.v1.data_access import *
 from auth.core import permission, verify_email_token, revoke_auth_token
 from auth.utils import *
 from basehandler import api_response
 from errors.v1.handlers import *
+
+# ----------------------------
+# User Data Access layer
+# ----------------------------
+from data_access import UserDacc
+
 
 ```
     We are importing are data access, authorisation, some utilities for preparing and checking passwords (section User Password Encryption/Decryption)
@@ -536,7 +540,7 @@ def signup(**kwargs: dict):
 
     # Swap the password in data for the hashed one
     data['password'] = pwd
-    UserDacc.create(data)
+    UserDacc.signup(data)
 
     return api_response()
 
@@ -577,8 +581,8 @@ def login(**kwargs: dict) -> dict:
     email = auth['email'].lower()
     password = auth['password']
 
-    user, token, refresh_token = UserDacc.login(email, password)
-    return api_response({'token': token, 'refresh_token': refresh_token, 'user': user})
+    uid, token, refresh_token = UserDacc.login(email, password)
+    return api_response({'token': token, 'refresh_token': refresh_token, 'user_id': uid, 'email': email})
 
 ```
 
@@ -746,7 +750,7 @@ from datetime import datetime
 from errors.v1.handlers import ApiError
 from auth.utils import check_password
 from auth.core import generate_jwt, decode_access_token, revoke_auth_token
-from database.mysql.db_utils import db_insert_update, db_query, db_delete
+from database.mysql.db_utils import db_insert_update, db_query
 from database.redis.rd_utils import redis_connection
 from utils import send_email
 ```
@@ -756,8 +760,6 @@ from utils import send_email
     Copy these to the file users/v1/data_access.py
 
     Let's go through our data access layer functions one at a time. With the first one, we'll include the class definition.
-
-#### create
 
 ```python
 # ------------------------------------------------
@@ -843,7 +845,7 @@ def login(email: str, password: str):
             # Update the record to state user logged in
             sql = "UPDATE users SET logged_in = %s WHERE id = %s"
             db_insert_update(sql, (1, user['id']))
-            return user['id'], email, token, refresh_token
+            return user['id'], token, refresh_token
         else:
             raise ApiError(message="email-unverified", status_code=400)
 
@@ -1128,6 +1130,48 @@ def generate_new_tokens(uid: int, old_access_token=False) -> tuple:
 
     Copy all of the above data access functions to the class UserDacc in users/v1/data_access.py.
 
+    Before we move on let's just add our 'send_email' function to our utilities file utils.py in the route directory.
+    Then we'll add the appropriate mail server configuration to our config/v1/app_config.py file.
+
+```python
+def send_email(receiver_email, subject, message_body):
+    """
+        Sends a plain-text email to receiver_email address with
+        subject and message body
+
+    :param receiver_email Email address of the receiver (To)
+    :param subject Subject field of the email
+    :param message_body Body of the email.
+    """
+    message = f"""\
+    Subject: {subject}
+
+    {message_body}."""
+
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL(SMTP['host'], SMTP['port'], context=context) as server:
+        server.login(SMTP['sender_email'], SMTP['sender_password'])
+        server.sendmail(SMTP['sender_email'], receiver_email, message)
+```
+
+    This function creates an SMTP (Simple Mail Transfer Protocol) is a method for sending emails. in our function we send
+    set up an smtp server. login to the server and send the email. 
+
+    Copy this code to utils.py and then copy the following configuration code to the 
+    config/v1/app_config.py file and we should be good to go.
+
+```python
+# Parameters to connect to the SMTP server for sending emails.
+# TODO: Use a different account than "tayfun@" only for automated emails.
+SMTP = {
+    "host": "mail.privateemail.com",
+    "port": 465,
+    "sender_email": "tayfun@fathat.org",
+    "sender_password": "Soxpoq-joxku9-kajgot"
+}
+```
+
+
 </details>
 
 <details>
@@ -1140,7 +1184,9 @@ def generate_new_tokens(uid: int, old_access_token=False) -> tuple:
 
     These are the only two functions required for handling our password encyption and checking.
 
-    The following code includes the functions and imports.
+    The following code includes the functions and imports. 
+
+    Copy this code to the auth/utils.py file
 
 ```python
 
