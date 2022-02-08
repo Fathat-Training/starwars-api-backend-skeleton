@@ -532,14 +532,11 @@ def options_filter(data, options):
     fl = []
 
     def filter_options(data_set, options):
-        new_dict = {}
-        for k, _ in data_set.items():
-            # The following line is a dictionary comprehension. It is used to filter optional data specified in the kwargs argument.
-            # which is passed into the API by the client request as a Json dictionary of options.
-            # The way it works is to filter key-value pairs from the returned film_entity dictionary against the kwargs dictionary.
-            # Any key-value pair in the film_entity dictionary that is in the options dictionary of kwargs and set to False should be excluded from the returned data.
-            filtered_dict = {k: v for (k, v) in data_set.items() if k not in options or options[k] is True}
-            new_dict.update(filtered_dict)
+        # The following line is a dictionary comprehension. It is used to filter optional data specified in the kwargs argument.
+        # which is passed into the API by the client request as a Json dictionary of options.
+        # The way it works is to filter key-value pairs from the returned film_entity dictionary against the kwargs dictionary.
+        # Any key-value pair in the film_entity dictionary that is in the options dictionary of kwargs and set to False should be excluded from the returned data.
+        new_dict = {k: v for (k, v) in data_set.items() if k not in options or options[k] is True}
         return new_dict
 
     if isinstance(data, list):
@@ -805,12 +802,6 @@ error_handlers = Blueprint('error_handlers', __name__)
      * Returns the response
 
     Copy the above code to the error handler at errors/v1/handlers.py
-
-    Now copy the following import to films/v1/endpoints.py and place it Module imports
-
-```python
-from errors.v1.handlers import ApiError
-```
 
     That's it our error handling is now in place. 
 
