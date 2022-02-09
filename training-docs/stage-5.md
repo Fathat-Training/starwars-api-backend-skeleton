@@ -276,7 +276,7 @@ securitySchemes:
         Required Headers:
 
           Authorization request header
-            Bearer valid Admin access token
+            Bearer Valid Basic Access token
 
         Errors:
 
@@ -1503,22 +1503,93 @@ create_user_table(connection)
 <details>
 <summary style="color:#4ba9cc">Testing</summary>
 
+    Let's test our user endpoints and see what happens.
+
+    Run the application again and remember to add the '/ui' after the url.
+
+    Scroll dow to the user endpoint s and you should see the following endpoints
+
+![](images/user-endpoints.png)
+
+    Click on the 'signup' endpoint.
+
+![](images/signup-endpoint.png)
+
+    Click on 'Try it out' and enter a valid email address and a password. 
+    Passwords should be between 8 and 32 characters long. Have a least one
+    upper case character and an integer. 
+
+    Leave the 'access_role' as it is 'basic'.
+
+    Click the 'execute' button.
+
+    The response should be a '200' with an empty set of  curly braces '{}'
+
+    If your email is genuine, you should get an email verification email to that address. 
+    When you get it do not click the link yet. First let's attempt to login.
+
+    Click the 'login' endpoint and click 'Try it out' and enter the same credentials you used to signup.
+    The response should be a '400' with the message 'email-unverified'.
+
+    Now click the link in the email, that will call the endpoint 'email_verification'.
+
+    You should now be able to login.
+
+    Click the 'execute' button again. The following response should appear, but obviously with different tokens and email addresses
+
+![](images/login-success.png)
+
+    Copy the tokens to a note or text file somewhere. 
+
+    We are now logged in and have received our access and refresh tokens
+
+    Next go to the 'films' endpoint. Click it and click 'Try it out' and see what happens. 
+    You should recieve a '401' response with a message 'No authorization token provided'
+
+    That is beacuse we have not yet simulated the 'films' endpoint call with a token in the header as a client would.
+    To do that in our API interface we need to add the tokens to it.
+
+    At the top right of the screen you'll see the following button
+
+![](images/auth-button.png)
+
+    Click on that and the following popup will appear. 
+
+![](images/auth-popup.png)
+    
+    Now get your tokens and place them in the relevant inpuyt fields, 
+    without the double quotations '"' marks at either end. 
+
+    Click 'Authorize' for each and close the popup.
+
+    Now re-visit the 'films' endpoint and try again. You should see a '200' response and the 7 
+    Star Wars films data.
+
+    So that's how our user authentication on our endpoints is handled. We login, we get our tokens 
+    and can then call the appropriate endpoints which allow our level of access. Without the tokens,
+    you cannot get access.
+
 </details>
 
 <details>
 <summary style="color:#4ba9cc">Exercise</summary>
 
-    The following three exercises fit nicely into what we have achieved already.
+    The following four exercises fit nicely into what we have achieved already.
 
-#### Exercise 1
+#### Exercise 1.
+
+    Test out all the new user endpoints. Figure out the purpose of the generate_new_tokens endpoint and what to do
+    after you have generated them. Have a good look over everything and then move on to exercise 2.
+
+#### Exercise 2.
 
     Add a resend_verification_email endpoint, including the openAPI Specification, the endpoint and data access code.
 
-#### Exercise 2
+#### Exercise 3.
 
     Add a user delete endpoint, including the openAPI Specification, the endpoint and data access code and a delete function for our database.
 
-#### Exercise 3.
+#### Exercise 4.
 
     Add a user password change endpoint including the openAPI Specification, the endpoint and data access code.
 </details>

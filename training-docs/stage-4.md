@@ -1145,7 +1145,7 @@ security:
 
             Authorization request header
 
-              Bearer Valid Admin Access Token
+              Bearer Valid Basic Access Token
 
         Errors:
 
