@@ -806,12 +806,6 @@ error_handlers = Blueprint('error_handlers', __name__)
 
     Copy the above code to the error handler at errors/v1/handlers.py
 
-    Now copy the following import to films/v1/endpoints.py and place it Module imports
-
-```python
-from errors.v1.handlers import ApiError
-```
-
     That's it our error handling is now in place. 
 
 </details>
@@ -887,6 +881,17 @@ def get_films(**kwargs):
 
     Copy and append the code above to the films/v1/endpoints.py 
     
+    Now copy the following import to films/v1/endpoints.py and place it Module imports
+
+    Also notice that we raise an API error if no films are found, so we had better introduce our error handling
+    into films
+
+    Copy the following import statement into the Module Imports, section of the endpoints file.
+
+```python
+from errors.v1.handlers import ApiError
+```
+
     The data access method 'films' is up next, let's take a look...
 
 ```python
