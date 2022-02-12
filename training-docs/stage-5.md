@@ -170,7 +170,7 @@ Summary of objectives:
 
 ```yaml
   /users/v1/logout:
-    get:
+    post:
       summary: Logout
       tags:
         - Users
