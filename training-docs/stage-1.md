@@ -10,14 +10,14 @@
 <span style="color:#FF1B55FF">API Foundation - app, endpoint - Api specification</span>
 
 #### Description: 
-    Getting Flask running and creating our first API call, defining the required OpenApi Yaml configuration for it.
-    Connecting that to our endpoint and finally running it.
+ Getting Flask running and creating our first API call, defining the required OpenApi Yaml configuration for it.
+ Connecting that to our endpoint and finally running it.
 
 <details>
 
 <summary style="color:#4ba9cc">1. Get flask running</summary>
   
-    Copy the following code and place it in main.py in the root folder. 
+>Copy the following code and place it in main.py in the root folder. 
 
 ```python
 
@@ -49,9 +49,9 @@ if __name__ == '__main__':
 
 ```
    
-    This provides a basic flask application that runs but does nothing. Try running main.py now.
-   
-    What we have is a running flask app on port 5000, as can be seen below:
+This provides a basic flask application that runs but does nothing. Try running main.py now.
+
+What we have is a running flask app on port 5000, as can be seen below:
 
 ```python
    * Serving Flask app "main" (lazy loading)
@@ -62,17 +62,17 @@ if __name__ == '__main__':
    * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
 ```
 
-    If you click on the [http://127.0.0.1:5000/](http://127.0.0.1:5000/) you will go to the browser but all you'll get is a not found page.
-    This is because the Flask app is simply running on a port on localhost but not pointing to anything. 
+If you click on the [http://127.0.0.1:5000/](http://127.0.0.1:5000/) you will go to the browser but all you'll get is a not found page.
+This is because the Flask app is simply running on a port on localhost but not pointing to anything. 
 
 </details>
 
 <details>
 <summary style="color:#4ba9cc">2. Add our first endpoint for the API</summary> 
 
-    Our first endpoint is a films endpoint
+Our first endpoint is a films endpoint
    
-    Navigate to the films/v1/folder and copy the following code and append it to endpoints.py
+>Navigate to the films/v1/folder and copy the following code and append it to endpoints.py
 
 ```python
 # -*- coding: utf-8 -*-
@@ -108,9 +108,9 @@ def get_film(film_id, **kwargs):
     pass
 ```
    
-    This is the basic python function for our first films endpoint.
+ This is the basic python function for our first films endpoint.
 
-    Now copy the following openAPi yaml markup to the openapi.yaml file in the root folder.
+ >Now copy the following openAPi yaml markup to the openapi.yaml file in the root folder.
 
 ```yaml
 openapi: 3.0.0
@@ -294,10 +294,10 @@ components:
         - $ref: '#/components/schemas/FilmVehicles'
 
 ```
-    Now we have our first Request, Response and Schema definitions for our first API call to get a films data via the films endpoint, but no way of connecting the two together. 
-    However, before we move on to fixing that let's take a good long look at what we've just placed in our openapi.yaml file.
+Now we have our first Request, Response and Schema definitions for our first API call to get a film's data via the films endpoint, but no way of connecting the two together. 
+However, before we move on to fixing that let's take a good long look at what we've just placed in our openapi.yaml file.
 
-    starting with an initial declaration below:
+Starting with an initial declaration below:
 
 ```yaml
 openapi: 3.0.0
@@ -306,32 +306,30 @@ info:
   title: "{{title}}"
   version: "1.0.0"
 ```
-    We ->
-    * Declare the openapi version - 3.0.0
-    * Set the title as a variable to be passed in via our code on startup
-    * Declared the version of our API - 1.0.0
+We
+* Declare the openapi version - 3.0.0
+* Set the title as a variable to be passed in via our code on startup
+* Declared the version of our API - 1.0.0
 
-    Next we define our servers. 
+Next we define our servers. 
 
 ```yaml
 servers:
   - url: http://127.0.0.1:5003/
     description: relative path example
 ```
-    Currently we have a single server but it is possible to define more than one server.
-    Please refer to the openAPI documentation at 
+Currently, we have a single server, but it is possible to define more than one server.
+>Please refer to the openAPI documentation at [Servers](https://spec.openapis.org/oas/v3.1.0#server-object)
+   
+Moving on to our paths. Paths specify the actual request url paths to our API endpoints and the construction of those
+requests vis-à-vis any parameters we need to include and where those parameters are contained within the request, i.e. path, query or body.
+They also define the API response for the endpoint.
 
-[Servers](https://spec.openapis.org/oas/v3.1.0#server-object)
-    
-    Moving on to our paths. Paths specify the actual request url paths to our API endpoints and the construction of those
-    requests vis-à-vis any parameters we need to include and where those parameters are contained within the request, i.e. path, query or body.
-    They also define the API response for the endpoint.
+The positioning of parameters in requests all depends on the type of request, i.e. 'GET', 'POST' etc. etc.
 
-    The positioning of parameters in requests all depends on the type of request, i.e. 'GET', 'POST' etc. etc.
-    
-    For now it is important to remember that for every endpoint there must be a path.
+For now, it is important to remember that for every endpoint there must be a path.
 
-    As you can see below we have a single path to our endpoint 'films.v1.endpoints.get_film'. 
+As you can see below we have a single path to our endpoint 'films.v1.endpoints.get_film'. 
 
 ```yaml
 /films/v1/{film_id}:
@@ -373,29 +371,29 @@ servers:
 
 ```
 
-    This is a 'GET' request meaning it is only requesting data and not passing any data to save. 
-    In 'GET' requests we can pass data via the 'path' of the url or as a query, i.e. after the 
-    the path using a '?' symbol to indicate the beginning of the query data.
+This is a 'GET' request meaning it is only requesting data and not passing any data to save. 
+In 'GET' requests we can pass data via the 'path' of the url or as a query, i.e. after the 
+path using a '?' symbol to indicate the beginning of the query data.
 
-    In this particular request we are passing the film id as part of the path:
+In this particular request we are passing the film id as part of the path:
 
 ```yaml
 /films/v1/{film_id}:
 ```
 
-    The curly braces indicate a parameter in the path. We are also passing a parameter called 'options', but this is in the query. We'll get to what that looks like shortly.
-    You can see how these are defined in the specification above.
+The curly braces indicate a parameter in the path. We are also passing a parameter called 'options', but this is in the query. We'll get to what that looks like shortly.
+You can see how these are defined in the specification above.
 
-    However, before we define our parameters we define our 'operationId'. This is what tells us where the endpoint in our code lives.
+However, before we define our parameters we define our 'operationId'. This is what tells us where the endpoint in our code lives.
 
 ```yaml
  operationId: films.v1.endpoints.get_film
 ```
 
-    The full path from our specification file is defined here, but instead of using '/' we use '.' to separate the path
+The full path from our specification file is defined here, but instead of using '/' we use '.' to separate the path
 
-    The last part of our request specification is the responses. The reponses declaration defines what to include for each response
-    type. 
+The last part of our request specification is the responses. The 'responses' declaration defines what to include for each response
+type. 
 
 ```yaml
 responses:
@@ -406,20 +404,19 @@ responses:
           schema:
             $ref: '#/components/schemas/FilmResponse'
 ```
-    Because we define our own API error handling we are just dealing with a successful http response '200' here.
-    What the response contains is defined in a schema called FilmResponse. We'll get to schemas shortly.
+Because we define our own API error handling we are just dealing with a successful http response '200' here.
+What the response contains is defined in a schema called FilmResponse. We'll get to schemas shortly.
 
 Next up is our 'components' section.
 
-    The 'components' section defines a set of resuable objects that may or may not be used by our request and response specifications.
+The 'components' section defines a set of reusable objects that may or may not be used by our request and response specifications.
 
-    Again, study the documentation at the following link for a full overview of 'components'
-
+>Again, study the documentation at the following link for a full overview of 'components'
 [Components](https://spec.openapis.org/oas/v3.1.0#components-object)
 
-    What is important for us is the 'Schemas' section of 'components'. This is where we shall define our request and response schemas. 
-    In other words we shall define the data structure of our query parameters in our requests and the structure of our responeses and 
-    what data they should contain.
+What is important for us is the 'Schemas' section of 'components'. This is where we shall define our request and response schemas. 
+In other words we shall define the data structure of our query parameters in our requests and the structure of our responses and 
+what data they should contain.
 
 ```yaml
 # -----------------------------------------------
@@ -547,36 +544,35 @@ components:
 
 ```
 
-    First up, we define our BaseFilm. This is a schema that defines all the basic film data we require in our response. Each item in the schema
-    is a property and comes with a simple description and a type. All of our types here are just strings.
+First up, we define our BaseFilm. This is a schema that defines all the basic film data we require in our response. Each item in the schema
+is a property and comes with a simple description and a type. All of our types here are just strings.
 
-    Note: you should not specify anything in our responses that is not actually part of the data tset that exists in the data source.
+Note: you should not specify anything in our responses that is not actually part of the data tset that exists in the data source.
 
+Next , there is a list of array properties for various data sets returned by the data source.
 
-    Next , there is a list of array properties for various data sets returned by the data source.
+Each of these properties defines a simple array of strings. In fact as we shall find out later, these strings
+represent urls. These are used in our response FilmResponse.
 
-    Each of these properties defines a simple array of strings. In fact as we shall find out later, these strings
-    represent urls. These are used in our response FilmResponse.
+Those properties can be selected to be in the response or not via the request parameter 'options'. 'options'
+is a key-value pair object, each key representing one of the properties, i.e. starships, and the value set to a boolean, i.e. True or False.
 
-    Those properties can be selected to be in the response or not via the request parameter 'options'. 'options'
-    is a key-value pair object, each key representing one of the properties, i.e. starships, and the value set to a boolean, i.e. True or False.
+We specify this object using the schema 'FilmExtras', which as can be seen is an object akin to what was described above.
 
-    We specifiy this object using the schema 'FilmExtras', which as can be seen is an object akin to what was described above.
+Finally, the FilmResponse, which dictates what is in our response object. As can be seen we specify that we want
+the BaseFilm object and any of the properties set to True in our request parameter 'options'.
 
-    Finally, the FilmResponse, which dictates what is in our response object. As can be seen we specify that we want
-    the BaseFilm object and any of the properties set to True in our request parameter 'options'.
-
-    That's it for our openAPi specification for the moment. More to come later.
+That's it for our openAPi specification for the moment. More to come later.
 
 </details>
 
 <details>
 <summary style="color:#4ba9cc">3. Add the connection between our openapi.yaml specification and our first film endpoint.</summary>
    
-   Now we understand the openapi.yaml specification for our API call's Request and Response let's add the connection (connexion)
-   between our openapi.yaml specification and our first film endpoint.
-   
-   Open the main.py file again and replace all the code with the following:
+Now we understand the openapi.yaml specification for our API call's Request and Response let's add the connection (connexion)
+between our openapi.yaml specification and our first film endpoint.
+
+>Open the main.py file again and replace all the code with the following:
 
 ```python
 # -*- coding: utf-8 -*-
@@ -623,20 +619,20 @@ if __name__ == '__main__':
 
 ```
 
-    Checkout what we have added in this latest main.py code.
+Checkout what we have added in this latest main.py code.
 
-    * We have removed the flask import line, because connexion now makes the interface to flask.
-    * We have imported a python package called connexion
-    * We have connected the connexion package to flask app - with strict validation and a title 
-    * We have added a startup function to the app in case we want to run any code prior to running the app. Perhaps some config loading?
-  
-    * We have added a host and a port to the app.run function. This tells the app to run on 
-       our localhost at port 5003.
+* We have removed the flask import line, because connexion now makes the interface to flask.
+* We have imported a python package called connexion
+* We have connected the connexion package to flask app - with strict validation and a title 
+* We have added a startup function to the app in case we want to run any code prior to running the app. Perhaps some config loading?
 
-    To recap:
-      * We have an app that will run on our locahost at port 5003.
-      * We have an openAPi yaml specification for films and we have a single endpoint for films.
-        But, let's not foget that the film endpoint require a response
+* We have added a host and a port to the app.run function. This tells the app to run on 
+   our localhost at port 5003.
+
+To recap:
+* We have an app that will run on our locahost at port 5003.
+* We have an openAPi yaml specification for films, and we have a single endpoint for films.
+  But, let's not forget that the film endpoint require a response
    
 ```yaml
    responses:
@@ -648,15 +644,15 @@ if __name__ == '__main__':
              $ref: '#/components/schemas/FilmResponse'
 ```
 
-    So we know we need a response, but how are we sending the response back from the film endpoint
-    to the client? Checking that endpoint, you will see that it has a 'pass'.
-   
-    To recap a pass in python does nothing but allows the function to be syntatically correct without any functional code.
+ So we know we need a response, but how are we sending the response back from the film endpoint
+ to the client? Checking that endpoint, you will see that it has a 'pass'.
 
-    So we have an endpoint that will receive arguments based on our OpenApi specification but 
-    actually does nothing.
-   
-    Let's run pour API application from main.py.
+ To recap a pass in python does nothing but allows the function to be syntactically correct without any functional code.
+
+ So we have an endpoint that will receive arguments based on our OpenApi specification but 
+ actually does nothing.
+
+ >Let's run pour API application from main.py.
 
 ```python
    * Running on http://127.0.0.1:5003/ (Press CTRL+C to quit)
@@ -667,45 +663,47 @@ if __name__ == '__main__':
    * Debug mode: off
 ```
 
-    Copy the following http://127.0.0.1:5003/ui/ and put it in a new tab/window of your browser.
-    
-    - Note this has the /ui/ appended to the host and port
-    
-    You will see the following:
+ >Copy the following http://127.0.0.1:5003/ui/ and put it in a new tab/window of your browser.
+ 
+>Note this has the /ui/ appended to the host and port
+ 
+You will see the following:
    
 ![](.build-1_images/92dc16da.png)
 
-    Take a moment to check the details of the API call
+>Take a moment to check the details of the API call
 
-    * Check what parameters it requires for the Request, what optional parameters might be passed
-    * Check the Response it requires
-    * Take a look at the schemas for Films
-   
+* Check what parameters it requires for the Request, what optional parameters might be passed
+* Check the Response it requires
+* Take a look at the schemas for Films
 
-    Once you are comfortable with the openAPi specification, 
-    Click on the GET film API and you will see the following:
+
+Once you are comfortable with the openAPi specification, 
+>Click on the GET film API and you will see the following:
 
 ![](.build-1_images/873778c7.png)
 
-    * Click on 'Try it out'
-    * Enter a 1 into the field where it says 'film_id'
-    * Click the blue execute button below
+>Click on 'Try it out'
 
-    You will see the following response from the server
+>Enter a 1 into the field where it says 'film_id'
+
+>Click the blue execute button below
+
+You will see the following response from the server
 
 ![](.build-1_images/102b7afe.png)
    
-    The server returned a 204 - No Content response. The call did not fail in as much as it was successfully routed, however,
-    the endpoint returned nothing.
+The server returned a 204 - No Content response. The call did not fail in as much as it was successfully routed, however,
+the endpoint returned nothing.
 
-    Let's take a step further in fixing that!
+Let's take a step further in fixing that!
 
 </details>
 
 <details>
 <summary style="color:#4ba9cc">4.Add our API Response</summary>
   
-   Copy the following code into the basehandler.py
+>Copy the following code into the basehandler.py
 
 ```python
   
@@ -742,48 +740,48 @@ def api_response(payload=None):
 
 ```
    
-    Here we are adding our function that handles the api responses from every endpoint that we code.
-    
-    Let's briefly discuss this function and understand what it does.
-    
-      * The function takes a single parameter named payload.
-      * It checks to see if that parameter is a dictionary.
-      * If it is a dictionary it returns it intact.
-      * If it is not a dictionary it returns an empty dictionary - i.e. opening and closing cuyrly braces.
+Here we are adding our function that handles the api responses from every endpoint that we code.
+ 
+Let's briefly discuss this function and understand what it does.
+ 
+* The function takes a single parameter named payload.
+* It checks to see if that parameter is a dictionary.
+* If it is a dictionary it returns it intact.
+* If it is not a dictionary it returns an empty dictionary - i.e. opening and closing curly braces.
 
-   
-    Let's get a call to this response function into our Films endpoint.
-    
-    Go to the films endpoint file - films/v1/endpoints.py, and add the following under the section
-    Module Imports.
+
+Let's get a call to this response function into our Films endpoint.
+ 
+ >Go to the films endpoint file - films/v1/endpoints.py, and add the following under the section
+ Module Imports.
 
 ```python
 from basehandler import api_response
 ```
   
-    This will import the function api_response from the basehandlers.py file that we added earlier
-    
-    Add the following to the get_film endpoint, removing 'pass' first.
+This will import the function api_response from the basehandlers.py file that we added earlier
+ 
+>Add the following to the get_film endpoint, removing 'pass' first.
    
 ```python
 return api_response()
 ```
  
-    Run the application again.
+>Run the application again.
     
-    This time we get a 200 response and two curly braces signifying an empty object. 
+This time we get a 200 response and two curly braces signifying an empty object. 
 
 ### Summary of what we have achieved so far!
 
-    * We have got a running flask app
-    * We have coded our first films endpoint.
-    * We have defined our Films specification for OpenAPI
-    * We have linked our Flask App, endpoint and openAPI specification via Connexion.
+* We have got a running flask app
+* We have coded our first films endpoint.
+* We have defined our Films specification for OpenAPI
+* We have linked our Flask App, endpoint and openAPI specification via Connexion.
 
-    Good Work!
+ Good Work!
 
-    But hold on a minute, all that work and we still have no data. Obviously we are missing something. Yes, you guessed it some route into the Star Wars Data.
-    Which, takes us neatly into stage-2, Defining our Data Access layers and defining our interface to the Star Wars API.
+ But hold on a minute, all that work, and we still have no data. Obviously we are missing something. Yes, you guessed it some route into the Star Wars Data.
+ Which, takes us neatly into stage-2, Defining our Data Access layers and defining our interface to the Star Wars API.
 
 [<span style="color:#4ba9cc">Stage 2 - Extending the API - external Api access, data access layer, filtering options, error handling, another endpoint</span>](stage-2.md)
 </details>

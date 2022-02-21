@@ -20,12 +20,12 @@ What we should be thinking about:
 * The character data access layer
 * The options for Characters - i.e. Selecting data we want to see - tip: similar to film options
 
-Some information about Characters. 
+>Some information about Characters. 
 
 * There are 83 Characters across the Star Wars movies. 
 * Each individual Character record on the external Star Wars API can be retrieved by adding an ID to the url path just like with films
 
-Hints: There should be two Character Endpoints.
+>Hints: There should be two Character Endpoints.
 
 Extras:
 
@@ -37,8 +37,6 @@ The Character endpoint for retrieving all Characters should allow the following 
 Tip: The above two parameters are already handled in the Star Wars API code - check it out again
      You need to define them for the API specification and the endpoints (**Under 'components') and pass them along so that they
      reach the Star Wars API.
-
-You have two days to figure this out - so let's get cracking.
 
 ## Good Luck and my the force be with you!
 
