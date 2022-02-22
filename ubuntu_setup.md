@@ -105,5 +105,6 @@ cd ./venv
 source bin/activate
 cd /mnt/github/starwars-api-backend-skeleton
 python3 -m pip install -r requirements.txt
-python3 main.py
 ```
+
+Now go to the readme.md file or the readme.html file and follow the instructions
