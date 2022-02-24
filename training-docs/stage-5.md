@@ -1594,3 +1594,6 @@ Add a user delete endpoint, including the openAPI Specification, the endpoint an
 
 Add a user password change endpoint including the openAPI Specification, the endpoint and data access code.
 </details>
+
+>Once you're done with the above exercises you can move on to [<span style="color:#4ba9cc">Stage 6 - Introducing Testing</span>](stage-6.md)
+

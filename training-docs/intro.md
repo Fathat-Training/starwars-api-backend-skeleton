@@ -1,5 +1,5 @@
 
-# starwars-api-backend-skeleton
+# starwars-api-backend-skeleton - Build The Project
 
 ---
 
@@ -82,3 +82,5 @@ Building Our API
 [<span style="color:#4ba9cc">Stage 4 - Adding Authentication</span>](stage-4.md)
 <br/>
 [<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](stage-5.md)
+<br/>
+[<span style="color:#4ba9cc">Stage 6 - Introducing Testing</span>](stage-6.md)
