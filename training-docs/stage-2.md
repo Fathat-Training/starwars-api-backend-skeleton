@@ -127,14 +127,14 @@ async def fetch_json(self, session: aiohttp.ClientSession(), url: str, **kwargs)
       """
       print(f"Requesting {url}")
       resp = await session.request('GET', url=url, **kwargs)
-      if resp.status == 200:
-          data = await resp.json(content_type=None)
-          print(f"Received data for {url}")
-          # Put the results data on the end of the list
-          self.swars_data.extend(data['results'])
-      else:
-          error = f"url {url}"
+      if resp.status != 200:
+          error = f"problem with url {url}"
           raise ApiError(message=error, status_code=resp.status)
+            
+      data = await resp.json(content_type=None)
+      print(f"Received data for {url}")
+      # Put the result's data on the end of the list
+      self.swars_data.extend(data['results'])
 
 async def api_query(self, urls, **kwargs):
       """
