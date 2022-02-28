@@ -146,13 +146,13 @@ in ascending order and one for descending order.
 
 We have created our first unittests for this project.
 
-###Exercise:
+### Exercise:
 
 >There was one function we did not test in the utils.py file. The 'options_filter' function. Write a test for that function.
 
 Once you have completed that function here are some more tests to implement:
 
-###Testing the starwars.py API requests:
+### Testing the starwars.py API requests:
 
 Copy the following code to the test_starwars.py file, study what they are doing and run them.
 
@@ -184,7 +184,7 @@ class TestStarWars(TestCase):
 
 ```
 
-###Testing the Authorisation Module
+### Testing the Authorisation Module
 
 There are three test files under auth:
 
@@ -194,7 +194,7 @@ There are three test files under auth:
 
 The contain the following tests for testing our Authorization code:
 
-####test_core.py
+#### test_core.py
 
 ```python
 from unittest import TestCase
@@ -230,7 +230,7 @@ class Test(TestCase):
 
 ```
 
-####test_enpoints.py
+#### test_enpoints.py
 
 ```python
 from unittest import TestCase
@@ -252,7 +252,7 @@ class Test(TestCase):
 
 ```
 
-####test_utils.py 
+#### test_utils.py 
 
 ```python
 from unittest import TestCase
@@ -275,7 +275,7 @@ class Test(TestCase):
 
 >Copy all the tests to the appropriate files and study each test and what its purpose is. Then run all the tests again.
 
-##That's it! Conrgatulations you have succesfully completed building your Star Wars backend API
+## That's it! Conrgatulations you have succesfully completed building your Star Wars backend API
 ###Give yourself a pat on the back and may the force be with you.
 
 

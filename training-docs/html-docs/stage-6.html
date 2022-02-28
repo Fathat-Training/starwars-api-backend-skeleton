@@ -6,7 +6,7 @@
   <style>body { background-color: rgba(43, 43, 43, 255.0); font-size: 14px !important; } body, p, blockquote, ul, ol, dl, table, pre, code, tr { color: rgba(169, 183, 198, 255.0); } a { color: rgba(88, 157, 246, 255.0); } table td, table th { border: 1px solid rgba(81, 81, 81, 255.0); } hr { background-color: rgba(81, 81, 81, 255.0); } kbd, tr { border: 1px solid rgba(81, 81, 81, 255.0); } h6 { color: rgba(120, 120, 120, 255.0); } blockquote { border-left: 2px solid rgba(88, 157, 246, 0.4); } ::-webkit-scrollbar-thumb { background-color: rgba(128, 128, 128, 0.34901960784313724); } blockquote, code, pre { background-color: rgba(212, 222, 231, 0.09803921568627451); }</style>
  </head> 
  <body>
-  <div md-src-pos="0..11318">
+  <div md-src-pos="0..11325">
    <h1 md-src-pos="0..31">starwars-api-backend-skeleton</h1>
    <hr>
    <h3 md-src-pos="38..72">Backend API Learning Workflow:</h3>
@@ -108,14 +108,14 @@
     <p md-src-pos="6774..6869"><span md-src-pos="6774..6869">Copy those tests and place them in your test class below the last test and run the tests again.</span></p>
    </blockquote>
    <p md-src-pos="6871..6924"><span md-src-pos="6871..6924">We have created our first unittests for this project.</span></p>
-   <h3 md-src-pos="6926..6938">Exercise:</h3>
-   <blockquote md-src-pos="6940..7064">
-    <p md-src-pos="6941..7064"><span md-src-pos="6941..7001">There was one function we did not test in the utils.py file.</span> <span md-src-pos="7002..7005">The</span> '<span md-src-pos="7007..7021">options_filter</span>' <span md-src-pos="7023..7032">function.</span> <span md-src-pos="7033..7064">Write a test for that function.</span></p>
+   <h3 md-src-pos="6926..6939">Exercise:</h3>
+   <blockquote md-src-pos="6941..7065">
+    <p md-src-pos="6942..7065"><span md-src-pos="6942..7002">There was one function we did not test in the utils.py file.</span> <span md-src-pos="7003..7006">The</span> '<span md-src-pos="7008..7022">options_filter</span>' <span md-src-pos="7024..7033">function.</span> <span md-src-pos="7034..7065">Write a test for that function.</span></p>
    </blockquote>
-   <p md-src-pos="7066..7142"><span md-src-pos="7066..7141">Once you have completed that function here are some more tests to implement</span>:</p>
-   <h3 md-src-pos="7144..7184">Testing the starwars.py API requests:</h3>
-   <p md-src-pos="7186..7279"><span md-src-pos="7186..7239">Copy the following code to the test_starwars.py file,</span> <span md-src-pos="7240..7279">study what they are doing and run them.</span></p>
-   <pre md-src-pos="7281..8144"><code class="language-python" md-src-pos="7281..8144"><span md-src-pos="7281..7291"></span><span md-src-pos="7291..7321"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
+   <p md-src-pos="7067..7143"><span md-src-pos="7067..7142">Once you have completed that function here are some more tests to implement</span>:</p>
+   <h3 md-src-pos="7145..7186">Testing the starwars.py API requests:</h3>
+   <p md-src-pos="7188..7281"><span md-src-pos="7188..7241">Copy the following code to the test_starwars.py file,</span> <span md-src-pos="7242..7281">study what they are doing and run them.</span></p>
+   <pre md-src-pos="7283..8146"><code class="language-python" md-src-pos="7283..8146"><span md-src-pos="7281..7291"></span><span md-src-pos="7291..7321"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
 <span md-src-pos="7321..7351"><span style="color: rgb(75, 169, 204);">from</span> starwars <span style="color: rgb(75, 169, 204);">import</span> StarWars</span>
 <span md-src-pos="7351..7384"><span style="color: rgb(75, 169, 204);">from</span> utils <span style="color: rgb(75, 169, 204);">import</span> read_json_file</span>
 <span md-src-pos="7384..7385"></span>
@@ -141,16 +141,16 @@
 <span md-src-pos="8094..8140">        <span style="color: rgb(75, 169, 204);">assert</span> len(starwars.swars_data) == <span style="color: rgb(104, 151, 187);">10</span></span>
 <span md-src-pos="8140..8141"></span>
 <span md-src-pos="8141..8142"></span><span md-src-pos="8141..8144"></span></code></pre>
-   <h3 md-src-pos="8146..8181">Testing the Authorisation Module</h3>
-   <p md-src-pos="8183..8221"><span md-src-pos="8183..8220">There are three test files under auth</span>:</p>
-   <ol md-src-pos="8223..8276">
-    <li md-src-pos="8223..8238">test_core.py</li>
-    <li md-src-pos="8239..8259">test_endpoints.py</li>
-    <li md-src-pos="8260..8276">test_utils.py</li>
+   <h3 md-src-pos="8148..8184">Testing the Authorisation Module</h3>
+   <p md-src-pos="8186..8224"><span md-src-pos="8186..8223">There are three test files under auth</span>:</p>
+   <ol md-src-pos="8226..8279">
+    <li md-src-pos="8226..8241">test_core.py</li>
+    <li md-src-pos="8242..8262">test_endpoints.py</li>
+    <li md-src-pos="8263..8279">test_utils.py</li>
    </ol>
-   <p md-src-pos="8278..8345"><span md-src-pos="8278..8344">The contain the following tests for testing our Authorization code</span>:</p>
-   <h4 md-src-pos="8347..8363">test_core.py</h4>
-   <pre md-src-pos="8365..9884"><code class="language-python" md-src-pos="8365..9884"><span md-src-pos="8365..8375"></span><span md-src-pos="8375..8405"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
+   <p md-src-pos="8281..8348"><span md-src-pos="8281..8347">The contain the following tests for testing our Authorization code</span>:</p>
+   <h4 md-src-pos="8350..8367">test_core.py</h4>
+   <pre md-src-pos="8369..9888"><code class="language-python" md-src-pos="8369..9888"><span md-src-pos="8365..8375"></span><span md-src-pos="8375..8405"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
 <span md-src-pos="8405..8487"><span style="color: rgb(75, 169, 204);">from</span> auth.core <span style="color: rgb(75, 169, 204);">import</span> generate_jwt<span style="color: rgb(204, 120, 50);">,</span> decode_auth_token<span style="color: rgb(204, 120, 50);">,</span> verify_payload<span style="color: rgb(204, 120, 50);">,</span> permission</span>
 <span md-src-pos="8487..8569"><span style="color: rgb(75, 169, 204);">from</span> config.v1.app_config <span style="color: rgb(75, 169, 204);">import</span> JWT_SECRET<span style="color: rgb(204, 120, 50);">,</span> JWT_REFRESH_SECRET<span style="color: rgb(204, 120, 50);">,</span> JWT_EMAIL_SECRET</span>
 <span md-src-pos="8569..8570"></span>
@@ -182,8 +182,8 @@
 <span md-src-pos="9836..9880">        <span style="color: rgb(75, 169, 204);">assert</span> permission(payload<span style="color: rgb(204, 120, 50);">,</span> <span style="color: rgb(203, 255, 172);">'basic'</span>)</span>
 <span md-src-pos="9880..9881"></span>
 <span md-src-pos="9881..9882"></span><span md-src-pos="9881..9884"></span></code></pre>
-   <h4 md-src-pos="9886..9906">test_enpoints.py</h4>
-   <pre md-src-pos="9908..10544"><code class="language-python" md-src-pos="9908..10544"><span md-src-pos="9908..9918"></span><span md-src-pos="9918..9948"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
+   <h4 md-src-pos="9890..9911">test_enpoints.py</h4>
+   <pre md-src-pos="9913..10549"><code class="language-python" md-src-pos="9913..10549"><span md-src-pos="9908..9918"></span><span md-src-pos="9918..9948"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
 <span md-src-pos="9948..9983"><span style="color: rgb(75, 169, 204);">from</span> auth.core <span style="color: rgb(75, 169, 204);">import</span> generate_jwt</span>
 <span md-src-pos="9983..10045"><span style="color: rgb(75, 169, 204);">from</span> auth.endpoints <span style="color: rgb(75, 169, 204);">import</span> decode_token<span style="color: rgb(204, 120, 50);">,</span> decode_refresh_token</span>
 <span md-src-pos="10045..10046"></span>
@@ -201,8 +201,8 @@
 <span md-src-pos="10485..10540">        self.assertIs(isinstance(payload<span style="color: rgb(204, 120, 50);">,</span> dict)<span style="color: rgb(204, 120, 50);">,</span> <span style="color: rgb(75, 169, 204);">True</span>)</span>
 <span md-src-pos="10540..10541"></span>
 <span md-src-pos="10541..10542"></span><span md-src-pos="10541..10544"></span></code></pre>
-   <h4 md-src-pos="10546..10564">test_utils.py</h4>
-   <pre md-src-pos="10566..11031"><code class="language-python" md-src-pos="10566..11031"><span md-src-pos="10566..10576"></span><span md-src-pos="10576..10606"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
+   <h4 md-src-pos="10551..10570">test_utils.py</h4>
+   <pre md-src-pos="10572..11037"><code class="language-python" md-src-pos="10572..11037"><span md-src-pos="10566..10576"></span><span md-src-pos="10576..10606"><span style="color: rgb(75, 169, 204);">from</span> unittest <span style="color: rgb(75, 169, 204);">import</span> TestCase</span>
 <span md-src-pos="10606..10607"></span>
 <span md-src-pos="10607..10660"><span style="color: rgb(75, 169, 204);">from</span> auth.utils <span style="color: rgb(75, 169, 204);">import</span> prep_password<span style="color: rgb(204, 120, 50);">,</span> check_password</span>
 <span md-src-pos="10660..10661"></span>
@@ -219,11 +219,11 @@
 <span md-src-pos="10939..10991">        result = check_password(<span style="color: rgb(203, 255, 172);">"00Apassword"</span><span style="color: rgb(204, 120, 50);">,</span> pwd)</span>
 <span md-src-pos="10991..11028">        self.assertIs(result<span style="color: rgb(204, 120, 50);">,</span> <span style="color: rgb(75, 169, 204);">False</span>)</span>
 <span md-src-pos="11028..11029"></span><span md-src-pos="11028..11031"></span></code></pre>
-   <blockquote md-src-pos="11033..11152">
-    <p md-src-pos="11034..11152"><span md-src-pos="11034..11122">Copy all the tests to the appropriate files and study each test and what its purpose is.</span> <span md-src-pos="11123..11152">Then run all the tests again.</span></p>
+   <blockquote md-src-pos="11039..11158">
+    <p md-src-pos="11040..11158"><span md-src-pos="11040..11128">Copy all the tests to the appropriate files and study each test and what its purpose is.</span> <span md-src-pos="11129..11158">Then run all the tests again.</span></p>
    </blockquote>
-   <h2 md-src-pos="11154..11249">That's it! Conrgatulations you have succesfully completed building your Star Wars backend API</h2>
-   <h3 md-src-pos="11250..11315">Give yourself a pat on the back and may the force be with you.</h3>
+   <h2 md-src-pos="11160..11256">That's it! Conrgatulations you have succesfully completed building your Star Wars backend API</h2>
+   <h3 md-src-pos="11257..11322">Give yourself a pat on the back and may the force be with you.</h3>
   </div>
  </body>
 </html>
