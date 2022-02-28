@@ -503,8 +503,7 @@ from errors.v1.handlers import *
 # ----------------------------
 # User Data Access layer
 # ----------------------------
-from data_access import UserDacc
-
+from users.v1.data_access import UserDacc
 
 ```
 We are importing are data access, authorisation, some utilities for preparing and checking passwords (section User Password Encryption/Decryption)
