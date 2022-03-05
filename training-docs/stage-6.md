@@ -276,6 +276,6 @@ class Test(TestCase):
 >Copy all the tests to the appropriate files and study each test and what its purpose is. Then run all the tests again.
 
 ## That's it! Conrgatulations you have succesfully completed building your Star Wars backend API
-###Give yourself a pat on the back and may the force be with you.
+### Give yourself a pat on the back and may the force be with you.
 
 

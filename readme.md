@@ -8,13 +8,15 @@ are used to provide the bridge to our python API endpoints.
 
 The project framework is empty save for a couple of database configuration declarations in the config.v1.app_config.py file. The
 
-Apart from these, here are several markdown files and their html counterparts under training-docs. These documents take the user through the build process 
+Apart from these, there are several markdown files and their html counterparts under training-docs. These documents take the user through the build process 
 of the project step by step with explanations of the code. The user is expected to copy and paste the code, using these
 instructions, into the relevant files and test as described. 
 
-The idea is that build process describes in detail all aspects of the project code-base without being over cumbersome. There is no time
+The build process describes in detail all aspects of the project code-base without being over cumbersome. There is no time
 specification for building the project. More important than time is the understanding of the project architecture and what is going on in the code itself. 
 
+Before building this project the student must have at least a beginners understanding of Python, OpenAPI and APIs in general. An understanding of the http protocol is
+recommended.
 
 ###Before you start
 Before you start the build process the fundamentals must be put in place. The project uses two databases, 'Redis' and 'MySQL'. The project should
