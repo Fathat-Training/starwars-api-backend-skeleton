@@ -22,8 +22,8 @@ recommended.
 Before you start the build process the fundamentals must be put in place. The project uses two databases, 'Redis' and 'MySQL'. The project should
 ideally be run in a virtual environment and requires python 3.10.
 
-These along with the databases both need to be setup prior to the build process and kept running. We have included instructions for creating the database code and any tables
-in the build code at the appropriate place. Other setup details for both the Mac OS and Ubuntu are provided in the root directory of the project
+The databases need to be setup prior to the build process and kept running. We have included instructions for creating the database code and any tables
+in the build code at the appropriate place. Other setup details for both Mac OS and Ubuntu are provided in the root directory of the project
 along with some accompanying bash scripts for the setup of 'Redis'. Please read the files properly before running any of the commands.
 If you have an existing virtual environment manager and the databases already setup on your system these can be ignored.
 
