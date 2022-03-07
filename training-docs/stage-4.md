@@ -18,7 +18,7 @@ We shall develop our authentication process for users to be able to access certa
 only when they have signed up and logged in. We'll be using JWT (Json Web Tokens) to handle the anatomy of our authentication process.
 
 Using a JWT package we shall create and manage the use of the required access tokens on behalf of each regular user or admin user. These tokens are generated and returned on Signup
-and Login and for email and password endpoints. They are then returned in the response body to the client who will need to store these tokens somewhere and pass them in the
+and Login and for email and password endpoints. They are returned inside the response body to the client who will need to store these tokens somewhere and pass them in the
 request header as described in API Requests.
 
 
@@ -53,13 +53,14 @@ It is important to remember that JWT is a standard for creating tokens, thus all
 
 A JWT token consists of three components, separated by comma (,) in the form
   
-    header.payload.signature
+`header.payload.signature`
 
  ##### JWT Header:
 
 The headers represent information (metadata) about the cryptographic algorithms used to encypt and decrypt the tokens
 
 The specified header should conform to:
+
 ```python
  {
     "alg": "HS256",
@@ -120,12 +121,12 @@ It is composed as follows:
 
 A typical token is an encoded representation of our claims and looks something like this:
 
-    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmYXRoYXQub3JnIiwiZXhwIjoxNjQxOTE1MTU2LC
-    JpYXQiOjE2NDE4NzkxNTYsInN1YiI6IjUzMDA5YTBiLTdhMjItNGZhMS1iYWExLWU4MWUyNjFhZGE2ZSIsImFjY
-    2Vzc19yb2xlIjoiYmFzaWMiLCJ1c2VyX2lkIjoxMywic3RhbmRhcmRfY2xhaW0iOnRydWV9.A8Fg069Rv2wgNbs
-    jbwMiaDLESWDlGxkevoBxThLbkeA
+`eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmYXRoYXQub3JnIiwiZXhwIjoxNjQxOTE1MTU2LC
+JpYXQiOjE2NDE4NzkxNTYsInN1YiI6IjUzMDA5YTBiLTdhMjItNGZhMS1iYWExLWU4MWUyNjFhZGE2ZSIsImFjY
+2Vzc19yb2xlIjoiYmFzaWMiLCJ1c2VyX2lkIjoxMywic3RhbmRhcmRfY2xhaW0iOnRydWV9.A8Fg069Rv2wgNbs
+jbwMiaDLESWDlGxkevoBxThLbkeA`
     
-This is the what is encoded and decoded by our JWT code in the application. Decoding this will reveal our claims
+This is what is encoded and decoded by our JWT code in the application. Decoding this will reveal our claims
 that we can then read and retrieve data from, such as user id or email address or other data.
 
 </details>
@@ -138,7 +139,7 @@ For example, some endpoints that can 'Delete' or perform other administrative ac
 level of access. Endpoint access is of course related to user access, regardless of the users being people or systems.
 
 Applications can have a varying number of authentication levels. A Typical system might have a basic access and an admin access.
-Some systems, for example, may have restrictive access for free tiers of their service and a different access for
+Some systems, for example, may have restrictive access for free tiers of their service and different access for
 paid tiers.
 
 Even different actions across a system by the same user may require different tokens. As mentioned previously, resetting emails and passwords
@@ -146,8 +147,8 @@ is a good example of this.
 
 Generally, each level of authentication carries private payload claims specific to the task at hand.
 
-For example, a token that enables user access to an endpoint to reset their password might have a claim called resetPassword. The code in the server checks the claim and makes sure that the token can be used to authorize only the password change operations, not others. 
-Private claims are there to differentiate the tokens for both clients and services.
+For example, a token that enables user access to an endpoint to reset their password might have a claim called resetPassword. The code in the server checks the claim and makes
+sure that the token can be used to authorize only the password change operations, not others. Private claims are there to differentiate the tokens for both clients and services.
 
 ##### The typical flow of authentication for our API can be seen below
 
@@ -159,10 +160,10 @@ The way things normally work is as follows:
 
 * A client will first sign-up to a service with a set of credentials (username and password)
 * After signup is complete the client will not yet have an access token, first they need to login
-* The client logs in to the system with the username and password used in the signup step, and if successful, receives their access token. The client stores the access token locally (eg. in the browser's storage) and it will need
-  to send it for every request that wants to access a secured endpoint.
+* The client logs in to the system with the username and password used in the signup step, and if successful, receives their access token. The client stores the access token 
+locally in the browser's storage, and will need to send it for every request that wants to access a secured endpoint.
 
-How we apply security to our endpoints is two fold.
+How we apply security to our endpoints is two-fold.
 
 1. By way of assigning a security declaration to the endpoints openAPI specification
 2. By checking the user permissions for that endpoint at the beginning of the endpoint code.
@@ -182,7 +183,7 @@ To sum it up:
 
 * A login request is made
 * If the user is signed up and not already logged in (you must ensure users logout before being able to login) then
-  generate any user tokens and send them back along with any other data in the response. 
+  generate required user tokens and send them back along with any other data in the response. 
 
 Once a client has tokens it is responsible for storing those tokens somewhere, we'll get to that when we get to our Frontend.
 
@@ -191,9 +192,7 @@ Once a client has tokens it is responsible for storing those tokens somewhere, w
 <details>
 <summary style="color:#4ba9cc">Our API Authentication Levels</summary>
 
-There is one type of access role for our API 'Basic Access'
-
-However, there will be several types of token. Each of these tokens shall have a unique private claim when generated. 
+There is one type of access role for our API `Basic Access` However, there will be several types of token. Each of these tokens shall have a unique private claim when generated. 
 Remember it is the private claim that enables us to identify the client and the type of token
 
 
@@ -209,8 +208,7 @@ Private claim:
 
 ##### 2. Refresh Token
 
-This token is used to ask for new tokens after a basic access token expires or gets lost.
-This is the only token that is saved with client data in a database.
+This token is used to ask for new tokens after a basic access token expires or gets lost. This is the only token that is saved with client data in a database.
 
 Private claim:
 
@@ -243,10 +241,10 @@ Private claim:
 <summary style="color:#4ba9cc">Adding our configuration details</summary>
 
 Now that we understand a little more about JWT and the way our authentication is going to work let's get some configuration 
-in place. We'll do this by placing some basic configuration data in a file at config/v1/app_config.py. This file will hold all
-of the applications configuration data. 
+in place. We'll do this by placing some basic configuration data in a file at `config/v1/app_config.py`. This file will hold all
+the application's configuration data. 
 
-Configuration data is often placed in a config file which is imported into any file that requires some of the configuration data, such as database handlers, 
+Configuration data is often placed in a config file which is imported into any file that requires configuration data, such as database handlers, 
 authentication handlers etc. etc.
 
 Let's start with the way we are going to encrypt our tokens
@@ -255,9 +253,8 @@ Let's start with the way we are going to encrypt our tokens
 
 All our tokens shall use HS256. 
 
-HS256. Hash-based Message Authentication Code (HMAC) is an algorithm that combines a certain payload with a secret
-using a cryptographic hash function like SHA-256. The result is a code that can be used to verify a message only if
-both the generating and verifying parties know the secret.
+HS256. Hash-based Message Authentication Code (HMAC) is an algorithm that combines a certain payload with a secret  using a cryptographic hash function like SHA-256. 
+The result is a code that can be used to verify a message only if both the generating and verifying parties know the secret.
 
 ```python
 # ---------------------------------------------------
@@ -268,7 +265,7 @@ JWT_ALGORITHM = "HS256"
 ```
 
 The issuer is in this case us, well actually FatHat.org.
-The algorithm as can be seen is the HS256.
+The algorithm is the HS256.
 
 >Copy the code directly above to the app_config.py file. We'll then add the secrets directly below.
 
@@ -318,8 +315,8 @@ JWT_REFRESH_PAYLOAD_CLAIM = ['user_id', 'refresh_claim']
 
 #### Token Time To Live
 
-    Here, we set default expiration times, in hours, for each type of token. When a token expires it should no longer be accepted by the API.
-    We will discover how we do this when we write the code.
+Here, we set default expiration times, in hours, for each type of token. When a token expires it should no longer be accepted by the API. We will discover how we do this when 
+we write the code.
 
 ```python
 # Number of hours a standard API usage token lasts
@@ -342,22 +339,21 @@ JWT_EMAIL_HOURS = 1
 <details>
 <summary style="color:#4ba9cc">Coding our authentication</summary>
 
-Before we start coding a quick summary of how this works again including the role of the Python/Flask package 'connexion'
-that we have already imported into our project in 'main.py'
+Before we start coding a quick summary of how this works again including the role of the Python/Flask package 'connexion' that we have already imported into our project in `main.py`
 
 Let's be clear. Our openAPi specification is a 'yaml' file. Yaml defined as a human-readable data-serialization language. The term yaml is said to originate from the term 'Yet another markup language'.
 A yaml file cannot run on its own. It's not code, it's simply a way of describing something and has to be read by humans and computers to be understood.
 
 This is where the package 'connexion' comes in, in conjunction with a few other packages that we do not directly import, such as packages for handling swagger user interfaces...
 
-Let's look at the diagram below and see how our openApi spec, connexion, our authentication code and our endpoints join together.
+Look at the diagram below and see how our openApi spec, 'connexion', our authentication code and our endpoints join together.
 
 ![](images/auth-token-check.png)
 
-As can be seen, connexion is our API gate-keeper. It does all the checks against the openAPI spec and handles the http requests and responses from the client.
+'Connexion' is our API gate-keeper. It does all the checks against the openAPI spec and handles the http requests and responses from the client.
 
 There are numerous ways we can start writing the code for our authentication methods. But to keep this simple we will start with the basic authentication endpoints
-called by connexion. 
+called by 'connexion'. 
 
 ```python
 # -*- coding: utf-8 -*-
@@ -411,22 +407,21 @@ def decode_refresh_token(token: str) -> dict:
 
 ```
 
-The 'decode_token' function takes the token passed by 'connexion' and performs two tasks:
+The `decode_token` function takes the token passed by 'connexion' and performs two tasks:
 
-* It calls the is_revoked function to check if the token has been revoked for some reason. Revoking basically means invalidating the token, marking the token not usable any more. If it has it'll raise an API error.
-* If the token has not been revoked it retrieves the payload from the token via decode_auth_token and returns it to 'connexion'.
-  There are a couple of caveats handled in the function too. These are token expiration and invalidaty, both of which will raise
-  errors.
+* It calls the is_revoked function to check if the token has been revoked for some reason. Revoking basically means invalidating the token, marking the token not usable anymore. 
+  If it has it'll raise an API error.
+* If the token has not been revoked it retrieves the payload from the token via decode_auth_token and returns it to 'connexion'. There are a couple of caveats handled in the
+  function too. These are token expiration and invalidity, both of which will raise errors.
 
 We will see each of these functions soon.
 
-Notice that we are using our configuration data by importing the JWT_SECRET from our config file. This is passed to the decode function
-so that it knows what secret to use for decoding.
+Notice that we are using our configuration data by importing the JWT_SECRET from our config file. This is passed to the decode function so that it knows what secret to use for decoding.
 
-The 'decode_refresh_token' does exactly the same but it passes a different secret to 'decode_auth_token'
+The `decode_refresh_token` does exactly the same but it passes a different secret to `decode_auth_token`
 >Copy the code to auth/endpoints.py
 
-Now let's move on to our core authentication code in auth/core.py
+Now let's move on to our core authentication code in `auth/core.py`
 
 We'll start literally from the top.
 
@@ -470,17 +465,16 @@ if module_path not in sys.path:
 
 ```
 
-The head of the file as usual is importing all the various packages, modules and utilities that we require. Notice
-all the configuration data being imported. 
+The head of the file as usual is importing all the various packages, modules and utilities that we require. Notice all the configuration data being imported. 
 
-We're also importing our valid access roles. These are not imported from the config, although they could be, they are imported from a
-file called schemas.py in the same folder as all our other auth code.
+We're also importing our valid access roles. These are not imported from the config, although they could be, they are imported from a file called schemas.py in the same folder 
+as all our other auth code.
 
 ```python
 from auth.schemas import access_roles
 ```
 
-So while we are here let's add our schemas
+So while we are here, let's add our schemas.
 
 >Copy the following code to auth/schemas.py
 
@@ -493,25 +487,26 @@ def access_roles() -> dict:
 ```
 The function access_roles returns a simple dictionary with two key-value pairs.
 
-As you can see the 'basic' has a value of 1 and 'admin' is 2. What this implies is that basic is less than admin.
-Doing this allows us to set a minimum access priviledge to our endpoints. For example, if we set the priviledge level of an endpoint as `basic` (1), roles with the same or higher number (including `admin`) can access itl if we set the level of an endpoint as `admin` (2), the `basic` role cannot access it as its level (1) is lower. In this way, we can implement the priviledge check as a simple integer comparison. It's not as visibile with just two roles but imagine
-there are numerous access roles ranging with values from 1 to n. If an endpoint requires an access role called for example, 
-'premium' then any access role with a value higher than 'premium' could also access that endpoint. 
+As you can see `basic` has a value of 1 and `admin` is 2. What this implies is that basic is less than admin.
+
+Doing this allows us to set a minimum access privilege to our endpoints. For example, if we set the privilege level of an endpoint as `basic` (1), roles with the same or higher 
+number (including `admin`) can access it. If we set the level of an endpoint as `admin` (2), the `basic` role cannot access it as its level, (1) is lower. In this way, we can 
+implement the privilege check as a simple integer comparison. It's not as visible with just two roles but imagine there are numerous access roles ranging with values from 1 to n. 
+If an endpoint requires an access role called for example, 'premium' then any access role with a value higher than 'premium' could also access that endpoint. 
 
 In short this allows a stepped authorisation system.
 
 
-There is one other line in the imports that is worthy of particular attention as it indicates an area we haven't covered yet,
-but will later. 
+There is one other line in the imports that is worthy of particular attention as it indicates an area we haven't covered yet, but will later. 
 
 ```python
 from database.redis.rd_utils import redis_connection
 ```
 
-This line tells us that we are using the 'Redis' nosql database. As will be shown, we use 'Redis' to store our
+This line tells us that we are using the Redis nosql database. As will be shown, we use Redis to store our
 invalid tokens. We check our incoming tokens against those contained in the database each time we receive a request.
 
-'Redis', is an in memory database so it's very fast. We'll cover 'Redis' and how we access it in the next section.
+Redis, is an in memory database so it's very fast. We'll cover Redis and how we access it in the next section.
 
 ok, let's move on to our first and primary function in our code. The function that creates the Tokens
 
@@ -602,27 +597,27 @@ def generate_jwt(**kwargs: dict) -> str:
         raise ApiError('user-not-found', status_code=401)
 ```
 
-generate_jwt does exactly what is say on the tin through a number of steps:
+`generate_jwt` does exactly what it says on the tin through a number of steps:
 
-* Checks that there are private claims in the kwargs (keywords arguments), i.e. user_id or access_role
-* Calls the function gen_token
+* Checks that there are private claims in the kwargs (keywords arguments), i.e. `user_id` and `access_role`
+* Calls the function `gen_token`
 
-gen_token does the following:
+`gen_token` does the following:
 
-* Creates an empty dictionary called payload.
-* Checks for the kwargs  argument called 'payload_claim'
-* Checks for another argument called 'hours'. This is an optional argument if the caller would like
-  to overide the default Time to Live value of the token. If not it uses the payload_claim argument to get 
+* Creates an empty dictionary called `payload`.
+* Checks for the kwargs argument called `payload_claim`
+* Checks for another argument called `hours`. This is an optional argument if the caller would like
+  to override the default Time to Live value of the token. If not it uses the `payload_claim` argument to get 
   the default hours for that particular token type.
 * Adds this data to the payload dictionary declared above
-* Adds the resgistered claims and our private claims.
-* Creates the token using a specific token secret and our JWT_ALGORITHM for signing (encryption and decryption)
+* Adds the registered claims and our private claims.
+* Creates the token using a specific token secret and our `JWT_ALGORITHM` for signing (encryption and decryption)
   and then returns the token to the caller.
 
 Api Errors are raised when:
 
-* There is no payload_claims argument
-* There is no user_id or access_role specified
+* There is no `payload_claims` argument
+* There is no `user_id` or `access_role` specified
 * There is a problem when creating the token
 * Any other exception that may occur.
 
@@ -632,7 +627,7 @@ That's it, our primary function is complete.
     
 >Append the code to auth/core.py
 
-Next Function - decode_auth_token
+Next Function - `decode_auth_token`
 
 ```python
 def decode_auth_token(token: str, secret: str) -> dict:
@@ -654,14 +649,14 @@ def decode_auth_token(token: str, secret: str) -> dict:
 ```
 
 This is simple function that is called to decode (decrypt) our token and reveal the payload.
-It calls the 'jwt' package function, jwt.decode to decode the token. The decypted payload is what is returned.
+It calls the 'jwt' package function, `jwt.decode` to decode the token. The decypted payload is what is returned.
 
-It also uses the 'jwt' exceptions jwt.ExpiredSignatureError and jwt.InvalidTokenError to raise when
+It also uses the 'jwt' exceptions `jwt.ExpiredSignatureError` and `jwt.InvalidTokenError` to raise when
 either the token ahas expired or is invalid.
 
 >Append the code to auth/core.py
 
-Next Function - has_expired 
+Next Function - `has_expired` 
 
 ```python
 def has_expired(token: str, secret: str):
@@ -679,10 +674,10 @@ def has_expired(token: str, secret: str):
         return True
 ```
 
-This is a helper function used if needed to check if a token has expired. Currently it is not used in our application,
+This is a helper function used, if needed, to check if a token has expired. Currently, it is not used in our application,
 but worthy of inclusion.
 
-Again it attempts to decode the token, returning False if it can (suggests it has not expired) and True if it cannot.
+Again it attempts to decode the token, returning False if it can (it has not expired) and True if it cannot.
 
 >Append the code to auth/core.py
 
@@ -728,7 +723,7 @@ import the Secrets across a range of python files.
 
 >Append the code to auth/core.py
 
-Next Functions - Revocation
+Next Functions - `Revocation`
 
 ```python
 def revoke_auth_token(token: str):
@@ -763,14 +758,14 @@ def is_revoked(token: str) -> bool:
     return False
 ```
 
-The first function above 'revoke_auth_token' is used to revoke a token by sending the token to a 'Redis' database handler called set.
+The first function above `revoke_auth_token` is used to revoke a token by sending the token to a Redis database handler called `set`.
 You'll see how this works later.
 
-The second function 'is_revoked' checks the 'Redis' database for the function using a 'get' function. Again, we'll ge tto this later.
+The second function `is_revoked` checks the Redis database for the function using a `get` function. Again, we'll ge tto this later.
 
 >Append the code to auth/core.py
 
-Next Function - verify_payload
+Next Function - `verify_payload`
 
 ```python
 def verify_payload(payload: dict, access_role: str) -> bool:
@@ -812,15 +807,14 @@ def verify_payload(payload: dict, access_role: str) -> bool:
         raise ApiError('token-invalid', status_code=401)
 ```
 
-This function has two parameters: a decypted payload and an access_role.
-It is primarily used as a function to secure endpoints via the function 'permissions',
+This function has two parameters: a decypted `payload` and an `access_role`. It is primarily used as a function to secure endpoints via the function `permissions`,
 which in turn is called as the first line of code in our secured endpoints.
 
-This is waht it does:
+This is what it does:
 
 * Assigns the appropriate claim from the payload
-* Checks via a set (set offers uniquness) function that all claims in the appropriate claim match the claims in the payload.
-* Checks the payload access role aginst the access_role parameter, which is the minumum access role 
+* Checks via a set (set offers uniqueness) function that all claims in the appropriate claim match the claims in the payload.
+* Checks the payload access role aginst the access_role parameter, which is the minimum access role 
   required to access the endpoint.
 
 Exceptions are raised when
@@ -831,7 +825,7 @@ Exceptions are raised when
 
 >Append the code to auth/core.py
 
-Next Function - verify_email_token
+Next Function - `verify_email_token`
 
 ```python
 def verify_email_token(token: str):
@@ -851,14 +845,14 @@ def verify_email_token(token: str):
 Verifies an email function by:
     
 * Checking that the token is not revoked
-* Decypting the token into a payload
-* Veifying the paylaod. 
+* Decrypting the token into a payload
+* Verifying the payload. 
 
 Exceptions occur only in the called functions.
 
 >Append the code to auth/core.py
 
-Next Function - select_secret
+Next Function - `select_secret`
 
 ```python
 def select_secret(payload: dict) -> str | bool:
@@ -881,11 +875,11 @@ def select_secret(payload: dict) -> str | bool:
 ```
 
 Another straight forward helper function for matching a secret against a claim and returning it.
-If no scret matches it returns False
+If no secret matches it returns False
 
 >Append the code to auth/core.py
 
-Next Function - permissions
+Next Function - `permissions`
 
 <-- TODO: Move this to the end to the "Adding authentication checks to our endpoints" section -->
 
@@ -907,14 +901,14 @@ def permission(payload: dict, access_role: str, logout=False) -> bool:
     return True
 ```
 
-'permissions' has three parameters:
+`permissions` has three parameters:
 
 * payload: token_info passed via the endpoint
 * access_role: the required access role to run the endpoint code after this checks
 * logout: set by default to False
 
-Again, straight forward, verifies payload and if logout is True, which means it is called via the logout endpoint,
-then revoke the token via 'revoke_auth_token'
+Again, straight forward, verifies payload and if logout is `True`, which means it is called via the logout endpoint,
+then revoke the token via `revoke_auth_token`
 
 >Append the code to auth/core.py
 
@@ -955,9 +949,9 @@ from config.v1.app_config import REDIS
 ```
 The imports above import everything we need to handle our redis database.
 
->Copy this code into database/redis/rd_utils.py
+>Copy this code into `database/redis/rd_utils.py`
 
-Now let's look at the core 'Redis' class RedisConnect
+Now let's look at the core Redis class `RedisConnect`
 ```python
 
 # ------------------------------------------------
@@ -1029,52 +1023,51 @@ redis_connection = RedisConnect()
 
 ```
 
-This class holds all the helper functions for connecting to our 'Redis' database, saving and fetching revoked tokens.
+This class holds all the helper functions for connecting to our Redis database, saving and fetching revoked tokens.
 
-The initialisation function - __init__
+The initialisation function: `__init__`
 
-This method takes our database configuration data from the config/app_config file aka imports above, and attempts a
+This method takes our database configuration data from the `config/app_config.py` file aka imports above, and attempts a
 connection with our redis database.
 
-Note: The redis database should be running at this point.
+>Note: The redis database should be running at this point.
 
-If successful it calls the class method 'check_connection' just to make sure we have access. If this fails we log an error,
-but do not raise an API Exception. We obviously need to check what is blocking the connection here, and our attention shall
-be focused if an exception occurs when we attempt access to the database.
+If successful it calls the class method `check_connection` just to make sure we have access. If this fails we log an error, but do not raise an API Exception. We obviously 
+need to check what is blocking the connection here, and our attention shall be focused if an exception occurs whilst accessing to the database.
 
-If it cannot connect at all we do raise an exception.
+If it cannot connect at all we raise an exception.
     
-Next Function - bgsave
+Next Function - `bgsave`
 
-This is a helper function that simply save the redis data to the disk in a background task. Redis automatically does this
+This is a helper function that saves the redis data to the disk in a background task. Redis automatically does this
 from time to time, but for extra consistency we shall call this function everytime we save a token.
 
-Next Function - set
+Next Function - `set`
 
 This function is what we call when we are revoking a token from our authentication code.
 
-It takes a key 'k' as a parameter. In our API that key is the token we want to save. We then save this key with a value of 1. 
-We could use any value here as we are only really interested int he token key, but because redis requires a value for a key 
+It takes a key `k` as a parameter. In our API that key is the token we want to save. We then save this key with a value of 1. 
+We could use any value here as we are only really interested in the token key, but because redis requires a value for a key 
 a binary 1 (True) seems appropriate.
 
-If 'Redis' is running ok the token will get saved, if it is not we raise an exception.
+If Redis is running ok the token will get saved, if it is not we raise an exception.
 
-Next Function - get 
+Next Function - `get` 
 
-This again takes the token as a parameter key 'k' and tries to get that key from the database.
-If 'Redis' is running ok it returns True or False, if it is not we raise an exception.
+This again takes the token as a parameter key `k` and tries to get that key from the database.
+If Redis is running ok it returns `True` or `False`, if it is not we raise an exception.
 
 That's it for the class methods.
 
-The one last declaration we need is to define the variable 'redis_connection' and assign it a RedisConnect class instance.
+The one last declaration we need is to define the variable `redis_connection` and assign it a `RedisConnect` class instance.
 We do this outside of the class as we don't really want to instantiate a new class whenever we need access to our redis database.
 
 ```python
 redis_connection = RedisConnect()
 ```
 
-As usual, make sure you have copied all of the code above to the file database/redis/rd_utils.py
-That's a wrap on our 'Redis' database functionality.
+As usual, make sure you have copied all the code above to the file `database/redis/rd_utils.py`
+That's a wrap on our Redis database functionality.
 
 </details>
 
@@ -1082,7 +1075,7 @@ That's a wrap on our 'Redis' database functionality.
 <summary style="color:#4ba9cc">Adding our security specifications to our openAPI</summary>
 
 Before we can make use of our authentication we need to add a few details to our openAPI specification
-in our openap.yaml file, under 'components' before 'schemas.
+in our openap.yaml file, under `components` before `schemas`.
 
 ```yaml
   securitySchemes:
@@ -1099,20 +1092,20 @@ in our openap.yaml file, under 'components' before 'schemas.
       x-bearerInfoFunc: auth.endpoints.decode_refresh_token
 ```
 
-There are two secuirty schemas. The first for standard access token authentication and the second for refresh token authorisation.
+There are two security schemas. The first for standard access token authentication and the second for refresh token authorisation.
 Whilst most secured endpoints will require a standard access token, there is a possibility at least one of our future user endpoints will require a refresh token.
 
-The schemas are appropriatesly named jwt and jwt_refresh, and as you can see specifiy that we are using JWT as the bearerFormat, and point to 
-their relative functions which they pass the token to, i.e. 'auth.endpoints.decode_token' for a standard access token and 'auth.endpoints.decode_refresh_token'. 
-Remember that 'connexion' will retrieve these schemas, understanding that they are JWT authentication schemas, will then take the token passed in the request 
+The schemas are appropriately named `jwt` and `jwt_refresh`, and as you can see specify that we are using JWT as the `bearerFormat`, both pointing to 
+their relative functions to which the token is passed, i.e. `auth.endpoints.decode_token` for a standard access token and `auth.endpoints.decode_refresh_token`. 
+Remember that 'connexion' will retrieve these schemas, understanding that they are JWT authentication schemas, and then take the token passed in the request 
 and pass it to the function.
 
-Notice also the 'type'. Here we are stating http as we will not be using any TLS (Transport Layer Security) for our project as it is deployed on our local machines.
-However, if we want to move this project to a server we would use TLS and change the 'type' to https.
+Notice also the `type`. Here we are stating http as we will not be using any TLS (Transport Layer Security) for our project as it is deployed on our local machines.
+However, if we want to move this project to a server we would use TLS and change the `type` to https.
 
-Now that we have our security schemas we can mark endpoints that we require authentication for.
+Now that we have our security schemas we can mark endpoints that require authentication.
 
-As an example let's mark our 'films' endpoint - /films/v1/ as requiring security. 
+As an example let's mark our films endpoint - `/films/v1/` as requiring security. 
 
 All we have to do is add the following below the endpoint specification:
 
@@ -1120,13 +1113,13 @@ All we have to do is add the following below the endpoint specification:
 security:
   - jwt: []
 ```
-    or 
+or 
 
 ```yaml
   - jwt_refresh: []
 ```
 
-    so we end up with this:
+so we end up with this:
 
 ```yaml
  /films/v1/:
@@ -1173,7 +1166,7 @@ security:
 
 It's as simple as that, we just mark any endpoint that we want authentication for.
 
->Copy this security specification to the 'components' part of the openAPi specification.
+>Copy this security specification to the `components` part of the openAPi specification.
 
 </details>
 
@@ -1181,10 +1174,11 @@ It's as simple as that, we just mark any endpoint that we want authentication fo
 <summary style="color:#4ba9cc">Adding authorisation checks to our endpoints</summary>
 
 At this point, we have code to generate (and sign) a token and verify the token and obtain the claims in it.
-The changes in the yaml file above will ensure that each endpoint will be called *only if* the token in the request is verified. But this is not enough, we also need to make sure the user can access only the endpoints it is allowed to access.
+The changes in the yaml file above will ensure that each endpoint will be called *only if* the token in the request is verified. But this is not enough, we also need to make 
+sure the user can access only the endpoints it is allowed to access.
 
 Finally, we need to add some form of authorisation control to the endpoints to check access roles.
-Let's use our 'get_films' endpoint to show how this is done:
+We'll use our `get_film` endpoint to show how this is done:
 
 ```python
 
@@ -1208,28 +1202,28 @@ def get_films(**kwargs):
         raise ApiError('films-not-found', status_code=404)
 ```
 
-You already have this endpoint in films/v1/endpoints.py. However, there is one line missing:
+You already have this endpoint in `films/v1/endpoints.py`. However, there is one line missing:
 
 ```python
 permission(kwargs['token_info'], access_role='basic')
 ```
 
 This is the function that is called before any code on an authenticated endpoint.
-You should remember this from earlier when coding the JWT core functionality. Also, you should recall how the 'token_info'
-data arrives in the kwargs (keyword arguments). That's right, 'connexion'!
+You should remember this from earlier when coding the JWT core functionality. Also, you should recall how the `token_info`data arrives in the kwargs (keyword arguments). 
+That's right, 'connexion'!
 
->Copy the following line and place it as in the code above, so it is the first line that executes in the endppoint.
+>Copy the following line and place it as in the code above, so it is the first line that executes in the endpoint.
 
-Now copy import line for this function and place it under 'Module Imports' in the same file.
+Now copy import line for this function and place it under `Module Imports` in the same file.
 
 ```python
 from auth.core import permission
 ```
 
-To summarise this function verifies the paylaod and checks the access role required for the endpoint, which as you can see is clearly stated above as 'basic' 
-and compares it to the access role contained in the payload. 
+To summarise, this function verifies the paylaod and checks the access role required for the endpoint, which as you can see is clearly stated above as `basic`, 
+comparing it to the access role contained in the payload. 
 
-We'll be using this function more when it comes to our 'users'
+We'll be using this function more when it comes to our 'Users' later.
 
 That's a wrap for our authentication section. Take your time to go over what we have done and ensure a comprehensive 
 understanding.
@@ -1251,10 +1245,10 @@ Notice the unlocked padlock to the far right of the endpoint head. This states t
 
 ![](images/films-auth-required.png)
 
-As you can see because we haven't input a token, it's telling us there was a 401 Error  - UNAUTHORISED. And in the response it tells us that
-'No authorization token provided'
+As you can see because we haven't input a token, it's telling us there was a `401 Error  - UNAUTHORISED`. And in the response it tells us that
+`No authorization token provided`
 
-With our authentication and authorisation now firrmly in place we can move on to our final stage of adding users and start to generate
+With our authentication and authorisation now firmly in place we can move on to our final stage of adding users and start to generate
 tokens and see how it really works.
 
 </details>
