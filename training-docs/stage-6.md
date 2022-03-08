@@ -34,11 +34,11 @@ actually calling the actual API call and touching the real database. The deal is
 For this project, we will avoid getting into complete endpoint to data access layer testing but will test some of our utility functions, our starwars.py code which
 calls the external Star Wars API and our authentication module.  We will achieve this by developing some basic python unittests.
 
-Let's start with our utils.py file:
+Let's start with our `utils.py` file:
 
 ### Testing Utils.py
 
-In this file we have a few functions that we are going to write tests for. The test_utils.py file in the root of the project is currently an empty file.
+In this file we have a few functions that we are going to write tests for. The `test_utils.py` file in the root of the project is currently an empty file.
 
 >Open that file
 
@@ -49,9 +49,9 @@ from unittest import TestCase
 from utils import dict_excludes, dict_sort, read_json_file
 ```
 
-Two of those imports should be familiar, but not the 'read_json_file' import. That's because it does not exist yet. So let's get that into the utils.py file in the root directory. remember
+Two of those imports should be familiar, but not the `read_json_file` import. That's because it does not exist yet. So let's get that into the utils.py file in the root directory.
 
->Open utils.py and place the following python code before the other functions but below the imports.
+>Open `utils.py` and place the following python code before the other functions but below the imports.
 
 ```python
 def read_json_file(json_file):
@@ -67,33 +67,33 @@ def read_json_file(json_file):
 ```
 
 The above function reads a file and loads the data from the file in json format. We could dress this function up more and make sure we cope with 
-data that cannot be formatted to Json, but that is for later. For now we'll keep it simple.
+data that cannot be formatted to Json, but that is for later. For now, we'll keep it simple.
 
-Ok, let's get back to our test_utils.py file where we copied the imports.
+Back to our `test_utils.py` file into which we copied the imports.
 
-Notice that the first import is 'unittest' and the class from that called TestCase. TestCase is the basic unittest class for testing which allows for the unitests to be
+>Notice that the first import is `unittest` and the class from that called TestCase. TestCase is the basic unittest class for testing which allows for the `unitests` to be
 run. 
 
 >For a full explanation visit [Python Unittests](https://docs.python.org/3/library/unittest.html)
 
-Ok, so now we have our unitests and it's base class imported we can set up our testing subclass. It's pretty simple! 
+Ok, so now we have our `unitests` and it's base class imported we can set up our testing subclass. It's pretty simple! 
 
->Copy the code below to the test_utils.py file.
+>Copy the code below to the `test_utils.py` file.
 
 ```python
 class Test(TestCase):
 ```
 As you can see it inherits the class TestCase.
 
-Now we can write or in this case copy our first test. This will be to test our 'dict_excludes' function in utils.py. It's imported already.
+Now we can write or in this case copy our first test. This will be to test our `dict_excludes` function in utils.py. It's imported already.
 
 ```python
 def test_dict_excludes(self):
     result = dict_excludes(test_dict, excludes)
     assert excludes_result == result
 ```
-As can be seen it's a simple test that calls the function 'dict_excludes' with two parameters, a dictionary and a list of keys to be excluded from
-that dictionary in a newly created returned dictionary, i.e. 'result'. We are then comparing the result with a variable called 'excludes_result'. 
+As can be seen it's a simple test that calls the function `dict_excludes` with two parameters, a dictionary and a list of keys to be excluded from
+that dictionary in a newly created returned dictionary, i.e. `result`. We are then comparing the result with a variable called `excludes_result`. 
 
 Before we can run the test we need to define the dictionary and our list of excludes and the excludes_result variable. We'll do this by including the following code above the 
 class but below the imports.
@@ -108,11 +108,11 @@ excludes_result = {'one': 1, "five": 5, "bird": "Parrot"}
 
 There we have the variables assigned to data structures ready for our test.
 
-Ok, let's run the test.
+**Running the test**
 
 There are several ways tests can be run:
 
-1. From an IDE, such as Pycharm. You can run the tests directly from the test file itself by just clicking on the green play icon, next to the test.
+1. From an IDE, such as PyCharm. You can run the tests directly from the test file itself by just clicking on the green play icon, next to the test.
 2. from the command line as follows:
 
 ```bash 
@@ -138,7 +138,7 @@ def test_dict_sort_descending(self):
     assert data_sorted[0]['title'] == 'The Phantom Menace'
 ```
 
-The above tests test the dictionary sort function, which takes Json data from a file in this case 'starwars-backup-data/films.json' and 
+The above tests test the dictionary sort function, which takes Json data from a file in this case `starwars-backup-data/films.json` and 
 passes the results list of that data as the first parameter, followed by the string we wish to sort by and the order. There is a test for sorting
 in ascending order and one for descending order.
 
@@ -148,13 +148,13 @@ We have created our first unittests for this project.
 
 ### Exercise:
 
->There was one function we did not test in the utils.py file. The 'options_filter' function. Write a test for that function.
+>There was one function we did not test in the `utils.py` file. The `options_filter` function. Write a test for that function.
 
 Once you have completed that function here are some more tests to implement:
 
 ### Testing the starwars.py API requests:
 
-Copy the following code to the test_starwars.py file, study what they are doing and run them.
+Copy the following code to the test_`starwars.py` file, study what they are doing and run them.
 
 ```python
 from unittest import TestCase
@@ -192,7 +192,7 @@ There are three test files under auth:
 2. test_endpoints.py
 3. test_utils.py
 
-The contain the following tests for testing our Authorization code:
+They contain the following tests for testing our Authorization code:
 
 #### test_core.py
 
@@ -275,7 +275,7 @@ class Test(TestCase):
 
 >Copy all the tests to the appropriate files and study each test and what its purpose is. Then run all the tests again.
 
-## That's it! Conrgatulations you have succesfully completed building your Star Wars backend API
+## That's it! Congratulations you have successfully completed building your Star Wars backend API
 ### Give yourself a pat on the back and may the force be with you.
 
 

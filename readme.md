@@ -18,7 +18,7 @@ specification for building the project. More important than time is the understa
 Before building this project the student must have at least a beginners understanding of Python, OpenAPI and APIs in general. An understanding of the http protocol is
 recommended.
 
-###Before you start
+### Before you start
 Before you start the build process the fundamentals must be put in place. The project uses two databases, 'Redis' and 'MySQL'. The project should
 ideally be run in a virtual environment and requires python 3.10.
 
