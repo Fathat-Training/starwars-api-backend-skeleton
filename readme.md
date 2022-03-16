@@ -9,7 +9,7 @@
 
 ---
 
-This codebase is free to use under the above mentioned MIT license. We encourage anyone who wishes to use it for self learning or teaching or any other usage, to do so without hindrance. 
+This tutorial is free to use under the above mentioned MIT license. We encourage anyone who wishes to use it for self learning or teaching to do so without hindrance. 
 Please leave the title, copyright and license information intact. 
 
 >Notes for those starting to learn about Software Development. Sometimes it feels impossible, sometimes it feels that there is too much to learn. Don't let these feelings stop
