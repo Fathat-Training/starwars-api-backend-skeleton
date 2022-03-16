@@ -259,7 +259,6 @@ from unittest import TestCase
 
 from auth.utils import prep_password, check_password
 
-
 class Test(TestCase):
 
     def test_password_correct(self):
