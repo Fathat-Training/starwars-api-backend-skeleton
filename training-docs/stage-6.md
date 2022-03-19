@@ -274,7 +274,9 @@ class Test(TestCase):
 
 >Copy all the tests to the appropriate files and study each test and what its purpose is. Then run all the tests again.
 
-## That's it! Congratulations you have successfully completed building your Star Wars backend API
-### Give yourself a pat on the back and may the force be with you.
+Congratulations, you have the Starwars Backend API running on your (development) machine.
+Next, we will learn a technology called Docker that allows us to deploy our backend to any other machine (in the cloud).
+
+[<span style="color:#4ba9cc">Stage 7 - Deploying our backend</span>](stage-7.md)
 
 
