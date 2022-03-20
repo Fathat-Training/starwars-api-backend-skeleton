@@ -84,3 +84,5 @@ Building Our API
 [<span style="color:#4ba9cc">Stage 5 - Introducing Users</span>](stage-5.md)
 <br/>
 [<span style="color:#4ba9cc">Stage 6 - Introducing Testing</span>](stage-6.md)
+<br/>
+[<span style="color:#4ba9cc">Stage 7 - Deploying our backend</span>](stage-6.md)
