@@ -464,7 +464,7 @@ FilmExtras:
 As can be seen `FilmExtras` is an openAPI schema object containing several properties. Each of those properties is boolean. It can be true or false. 
 Take a quick peak at our API interface to check how this object is represented.
 
-![](.build-1_images/873778c7.png)
+![](images/873778c7.png)
 
 The object in question is a simple Json key-value pair object and by default each key has a value set to true. 
 We can change the value to false if we do not require the information to be passed back in the response.

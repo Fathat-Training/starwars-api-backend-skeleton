@@ -669,7 +669,7 @@ To recap:
  
 You will see the following:
    
-![](.build-1_images/92dc16da.png)
+![](images/92dc16da.png)
 
 >Take a moment to check the details of the API call
 
@@ -681,7 +681,7 @@ You will see the following:
 Once you are comfortable with the openAPi specification, 
 >Click on the GET film API and you will see the following:
 
-![](.build-1_images/873778c7.png)
+![](images/873778c7.png)
 
 >Click on 'Try it out'
 
@@ -691,7 +691,7 @@ Once you are comfortable with the openAPi specification,
 
 You will see the following response from the server
 
-![](.build-1_images/102b7afe.png)
+![](images/102b7afe.png)
    
 The server returned a 204 - No Content response. The call did not fail in as much as it was successfully routed, however,
 the endpoint returned nothing.
