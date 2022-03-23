@@ -15,7 +15,9 @@ Please leave the title, copyright and license information intact.
 >Notes for those starting to learn about Software Development. Sometimes it feels impossible, sometimes it feels that there is too much to learn. Don't let these feelings stop
 you. You will have many breakthrough moments that will encourage you and provide a sense of achievement. Continue learning, it's what life is all about.
 
->Notes for all those existing Python gurus. If you have any constructive comments and recommendations we would love to hear about them. Feel free to contact us at info@fathat.org
+>Notes for all those existing Python gurus. If you have any constructive comments and recommendations we would love to hear about them. 
+> The completed project without the learning tutorials is available on GitHub at [StarWars API](https://github.com/Fathat-Training/starwars-api.git).
+> To provide feedback on this course or contact us at Fathat.org, drop us a line at hello@fathat.org
 
 ---
 
