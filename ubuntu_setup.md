@@ -107,4 +107,4 @@ cd /mnt/github/starwars-api-backend-skeleton
 python3 -m pip install -r requirements.txt
 ```
 
-Now go to the readme.md file or the readme.html file and follow the instructions
+Now go to the readme.md file and follow the instructions

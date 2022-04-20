@@ -104,4 +104,4 @@ For all Mysql commands see the link above and read the docs.
 
 That's it for the setup, once all these components are in place and running as they should be you can start learning and building the project
 here using 
-> [Build the project- markdown instructions](training-docs/intro.md) or running the html files starting with the introduction at training-docs/html-docs/intro.html
+> [Build the project- markdown instructions](training-docs/intro.md)
